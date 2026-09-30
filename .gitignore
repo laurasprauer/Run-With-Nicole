@@ -1,0 +1,34 @@
+# dependencies
+/node_modules
+/studio/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# sanity
+/studio/dist
+/studio/.sanity
+
+# generated at build time from Sanity
+/public/sitemap.xml
+/public/static-page-data.json
+/public/static-slugs.json
+
+# env files — real values stay local / in Netlify. .env.example is committed.
+.env
+.env.local
+.env.*.local
+/studio/.env
+!.env.example
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# Local Netlify folder
+.netlify
+/public/_redirects
+/public/robots.txt

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Forms</title>
+  </head>
+  <body>
+    <!--
+      Netlify Forms registration — NOT a visible page.
+      Netlify scans this static file at deploy time to learn the "inquiry" form's fields.
+      The real form (src/app/components/contactForm/component.js) POSTs here.
+      ⚠️ Keep these field names in sync with the React form, or new fields are dropped.
+    -->
+    <form name="inquiry" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="inquiry" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="number" name="age" />
+      <input type="email" name="email" />
+      <input type="radio" name="trainingForRace" value="Yes" />
+      <input type="radio" name="trainingForRace" value="No" />
+      <select name="raceDistance"><option value="">—</option></select>
+      <input type="date" name="raceDate" />
+      <textarea name="coachGoals"></textarea>
+      <input type="text" name="referralSource" />
+    </form>
+  </body>
+</html>

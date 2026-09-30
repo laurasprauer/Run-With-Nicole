@@ -1,0 +1,75 @@
+.footer {
+  background-color: var(--color-navy-dark);
+  color: var(--color-white);
+}
+
+.inner {
+  @include container;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+  padding-top: 4rem;
+  padding-bottom: 3rem;
+}
+
+.logo {
+  display: block;
+  height: 5.5rem;
+
+  // On navy the blue runner disappears — render it white. Text + line keep brand colors.
+  :global(.logoRunner) {
+    fill: var(--color-white);
+  }
+
+  @include media($small, down) {
+    height: 4.5rem;
+  }
+}
+
+.slogan {
+  margin: 0;
+  font-stretch: var(--font-stretch-condensed);
+  font-weight: 700;
+  font-size: 1.625rem;
+  letter-spacing: 0.02em;
+  color: var(--color-teal);
+}
+
+.email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  color: var(--color-white);
+  text-decoration: none;
+
+  @include hover {
+    color: var(--color-teal);
+  }
+}
+
+.emailIcon {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.bottom {
+  border-top: 1px solid color-alpha("--color-white", 0.15);
+  padding: 1.25rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: color-alpha("--color-white", 0.7);
+  }
+}

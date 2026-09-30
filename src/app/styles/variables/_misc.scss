@@ -1,0 +1,13 @@
+// Emitted as CSS custom properties on :root (see global-styles.scss).
+// --font-open-sans itself is set in src/pages/_app.js by next/font.
+$misc: (
+  "--font-family": (var(--font-open-sans), "Open Sans", Arial, sans-serif),
+  // Open Sans is a variable font with a width (wdth) axis — 75% = Open Sans Condensed
+  "--font-stretch-condensed": 75%,
+  "--header-height": 4.5rem,
+  "--border-radius-sm": 4px,
+  "--border-radius-lg": 12px,
+  "--transition": 0.3s,
+  "--box-shadow": 0 2px 12px rgba(0, 0, 0, 0.08),
+  "--box-shadow-darker": 0 6px 24px rgba(0, 0, 0, 0.16),
+);

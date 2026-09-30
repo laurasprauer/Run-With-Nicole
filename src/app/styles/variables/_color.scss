@@ -1,0 +1,33 @@
+@use "sass:map";
+
+// Every color lives here. Component files use var(--color-*) or color-alpha() —
+// never a bare hex value.
+$color: (
+  // Brand
+  "--color-teal": #4ad5bb,
+  "--color-teal-dark": #2fb39b,
+  "--color-sky": #2fbcd0,
+  "--color-navy": #266090,
+  "--color-navy-dark": #1b4669,
+
+  // The runner in the logo — intentionally a touch different from --color-navy
+  "--color-logo-blue": #276ba4,
+
+  // Neutrals
+  "--color-white": #ffffff,
+  "--color-off-white": #f3f8fa,
+  "--color-text": #1f2a33,
+  "--color-text-muted": #5b6873,
+  "--color-border": #d5e1e8,
+  "--color-error": #c0392b,
+
+  // Overlays
+  "--color-overlay-dark": rgba(12, 32, 48, 0.55),
+);
+
+// Returns a color from the $color map at a given opacity.
+// Usage: color-alpha("--color-white", 0.15)
+@function color-alpha($var-name, $alpha) {
+  $hex: map.get($color, $var-name);
+  @return rgba($hex, $alpha);
+}

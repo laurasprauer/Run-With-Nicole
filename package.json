@@ -1,0 +1,37 @@
+{
+  "name": "run-with-nicole",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "preinstall": "node scripts/check-node-version.js",
+    "postinstall": "cd studio && npm install",
+    "dev": "npm run generate:slugs && npm run generate:pageData && next dev",
+    "generate:slugs": "node ./src/app/utils/generateSlugs.cjs",
+    "generate:pageData": "node ./src/app/utils/generatePageData.cjs",
+    "generate:sitemap": "node ./src/app/utils/generateSitemap.cjs",
+    "generate:netlifyFiles": "node ./src/app/utils/generateNetlifyFiles.cjs",
+    "build": "npm run generate:slugs && npm run generate:pageData && npm run generate:sitemap && npm run generate:netlifyFiles && next build",
+    "studio": "cd studio && npm run dev",
+    "lint": "eslint src/",
+    "check-node": "node scripts/check-node-version.js"
+  },
+  "dependencies": {
+    "@portabletext/react": "^3.2.1",
+    "@sanity/client": "^7.15.0",
+    "classnames": "^2.5.1",
+    "dotenv": "^16.4.7",
+    "next": "^16.1.6",
+    "prop-types": "^15.8.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "sass": "^1.85.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.28.0",
+    "eslint-config-next": "^16.1.6"
+  },
+  "engines": {
+    "node": ">=22.13.1",
+    "npm": ">=10.0.0"
+  }
+}

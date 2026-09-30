@@ -1,0 +1,9 @@
+// Hover styles only on devices that can hover; also applies to keyboard focus.
+@mixin hover {
+  @media (hover: hover) {
+    &:hover,
+    &:focus-visible {
+      @content;
+    }
+  }
+}

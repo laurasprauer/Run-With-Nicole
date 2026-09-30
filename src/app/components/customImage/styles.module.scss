@@ -1,0 +1,33 @@
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.imageBlur {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  transform: scale(1.05);
+  z-index: 1;
+  transition: opacity 0.5s ease;
+
+  &.loaded {
+    opacity: 0;
+  }
+}
+
+.imageFull {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+
+  &.loaded {
+    opacity: 1;
+  }
+}

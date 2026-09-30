@@ -1,0 +1,27 @@
+{
+  "name": "run-with-nicole-studio",
+  "private": true,
+  "version": "1.0.0",
+  "main": "package.json",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "import-seed": "sanity dataset import seed/home.ndjson production --missing"
+  },
+  "dependencies": {
+    "@sanity/icons": "^3.7.4",
+    "@sanity/ui": "^3.1.11",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-is": "^19.2.3",
+    "sanity": "^5.11.0",
+    "styled-components": "^6.1.16"
+  },
+  "engines": {
+    "node": ">=22.13.1",
+    "npm": ">=10.0.0"
+  }
+}

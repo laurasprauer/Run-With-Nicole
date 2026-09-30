@@ -1,0 +1,190 @@
+// Global styles. Variables + mixins are auto-injected (next.config.js → sassOptions).
+// Heads-up: element selectors here (h1–h6, p, li…) apply everywhere — scope overrides
+// inside a component's module rather than weakening these.
+
+:root {
+  @each $name, $value in $color {
+    #{$name}: #{$value};
+  }
+
+  @each $name, $value in $misc {
+    #{$name}: #{$value};
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  // Anchor links (#how-it-works etc.) land below the fixed header
+  scroll-padding-top: var(--header-height);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  padding-top: var(--header-height);
+  background-color: var(--color-white);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+}
+
+button {
+  @include reset-button;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+strong {
+  font-weight: 700;
+}
+
+a {
+  color: var(--color-navy);
+  transition: color var(--transition);
+
+  @include hover {
+    color: var(--color-sky);
+  }
+}
+
+// --------------------------------------------------------
+// Typography — h1–h3 are the "main headings": Open Sans Condensed
+// (same variable font, narrowed via font-stretch).
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-family);
+  font-stretch: var(--font-stretch-condensed);
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 1.25rem;
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+
+  @include media($medium-highest, down) {
+    font-size: 3.25rem;
+  }
+
+  @include media($small, down) {
+    font-size: 2.5rem;
+  }
+}
+
+h2 {
+  font-size: 3rem;
+  line-height: 1.1;
+
+  @include media($medium-highest, down) {
+    font-size: 2.5rem;
+  }
+
+  @include media($small, down) {
+    font-size: 2.125rem;
+  }
+}
+
+h3 {
+  font-size: 1.625rem;
+  line-height: 1.25;
+  margin-bottom: 0.625rem;
+
+  @include media($small, down) {
+    font-size: 1.375rem;
+  }
+}
+
+h4,
+h5,
+h6 {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.4;
+  margin: 0 0 0.5rem;
+}
+
+p,
+li {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+
+  @include media($small, down) {
+    font-size: 1rem;
+  }
+}
+
+p {
+  margin: 0 0 1.125rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// --------------------------------------------------------
+// Logo default colors (svg/svgs.js → `logo`). Override per placement with
+// :global(.logoRunner) etc. inside a component module (see footer).
+
+.logoSvg {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+
+.logoLine {
+  fill: var(--color-sky);
+}
+
+.logoRunner {
+  fill: var(--color-logo-blue);
+}
+
+.logoText {
+  fill: var(--color-teal);
+}
+
+// --------------------------------------------------------
+// Utilities
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

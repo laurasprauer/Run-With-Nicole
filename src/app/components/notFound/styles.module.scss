@@ -1,0 +1,29 @@
+.container {
+  background-color: var(--color-off-white);
+}
+
+.wrapper {
+  @include container;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  min-height: 60vh;
+  justify-content: center;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.code {
+  font-stretch: var(--font-stretch-condensed);
+  font-weight: 700;
+  font-size: 6rem;
+  line-height: 1;
+  color: var(--color-teal);
+  margin: 0 !important;
+}

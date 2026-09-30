@@ -1,0 +1,86 @@
+@use "./_media" as *;
+@use "./_support" as *;
+
+// Centered content column used by every section's inner .wrapper.
+@mixin container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+
+  @include media($small, down) {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+// Standard vertical rhythm for a section's .wrapper.
+@mixin section-padding {
+  padding-top: 5.5rem;
+  padding-bottom: 5.5rem;
+
+  @include media($medium-highest, down) {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  @include media($small, down) {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+// Section background colors — the single source of truth for `componentBgColor`.
+// Include inside a section's root class:  .container { @include section-bg; }
+// Adding a color: add a block here, the swatch in studio/components/BgColorSelector.jsx,
+// getButtonTheme.js, and the table in CLAUDE.md.
+@mixin section-bg {
+  &.white {
+    background-color: var(--color-white);
+    color: var(--color-text);
+  }
+
+  &.navy {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    li {
+      color: var(--color-white);
+    }
+
+    a:not([data-button]) {
+      color: var(--color-teal);
+
+      @include hover {
+        color: var(--color-white);
+      }
+    }
+  }
+}
+
+// Section-level padding toggles (removeTopPadding / removeBottomPadding props).
+@mixin section-padding-toggles($wrapper: ".wrapper") {
+  &.removeTopPadding #{$wrapper} {
+    padding-top: 0;
+  }
+
+  &.removeBottomPadding #{$wrapper} {
+    padding-bottom: 0;
+  }
+}
+
+// Small uppercase label above headings (e.g. step numbers, card badges).
+@mixin eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,117 @@
+.container {
+  @include section-bg;
+  @include section-padding-toggles;
+}
+
+.wrapper {
+  @include container;
+  @include section-padding;
+}
+
+.intro {
+  max-width: 48rem;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.grid {
+  @include reset-list;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+
+  &[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include media($medium, down) {
+    &,
+    &[data-count="3"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @include media($small-lowest, down) {
+    &,
+    &[data-count="3"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 1.75rem;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-off-white);
+  border-top: 4px solid var(--color-teal);
+
+  // Alternate accent between the two brand blues
+  &:nth-child(even) {
+    border-top-color: var(--color-sky);
+
+    .iconWrapper {
+      background-color: color-alpha("--color-sky", 0.15);
+      color: var(--color-sky);
+    }
+  }
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 1.25rem;
+  background-color: color-alpha("--color-teal", 0.18);
+  color: var(--color-teal-dark);
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.step {
+  @include eyebrow;
+  color: var(--color-text-muted);
+  margin-bottom: 0.375rem;
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.text {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+}
+
+// On navy, cards become translucent panels
+.navy {
+  .box {
+    background-color: color-alpha("--color-white", 0.08);
+  }
+
+  .iconWrapper,
+  .box:nth-child(even) .iconWrapper {
+    background-color: color-alpha("--color-white", 0.12);
+    color: var(--color-teal);
+  }
+
+  .box:nth-child(even) .iconWrapper {
+    color: var(--color-sky);
+  }
+
+  .step {
+    color: color-alpha("--color-white", 0.7);
+  }
+
+  .box .text {
+    color: color-alpha("--color-white", 0.85);
+  }
+}
