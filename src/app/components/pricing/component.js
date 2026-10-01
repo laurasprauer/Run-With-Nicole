@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import { PortableText } from "@portabletext/react";
 import Button from "@components/button/component.js";
 import SVG from "@components/svg/component.js";
 import { portableTextComponents } from "@utils/portableTextComponents.js";
+import { getButtonTheme } from "@utils/getButtonTheme.js";
 import { getSectionClasses } from "@utils/getSectionClasses.js";
 
 import * as styles from "./styles.module.scss";
@@ -69,14 +69,14 @@ PriceTable.propTypes = {
   }),
 };
 
-// Three equal plan cards + a payments bar. Each card: badge, title, price, features
-// (✓ included / ✗ not included), optional price table (collapsible via <details>),
-// footnote and a CTA pinned to the bottom so buttons line up across cards.
+// Intro text (heading + payment terms), one section button (e.g. "Get Started" → #contact),
+// then three equal plan cards. Each card: title, price, features (✓ included /
+// ✗ not included), optional price table (collapsible via <details>) and a footnote.
 export const Pricing = ({
   body,
   plans = [],
-  paymentsTitle,
-  paymentsItems = [],
+  componentButtonLabel,
+  componentButtonLink,
   componentBgColor,
   removeTopPadding,
   removeBottomPadding,
@@ -96,13 +96,17 @@ export const Pricing = ({
           </div>
         )}
 
+        {componentButtonLabel && componentButtonLink && (
+          <div className={styles.buttonWrapper}>
+            <Button to={componentButtonLink} theme={getButtonTheme(componentBgColor)}>
+              {componentButtonLabel}
+            </Button>
+          </div>
+        )}
+
         <div className={styles.grid}>
           {plans.map((plan, i) => (
-            <article
-              key={plan._key || i}
-              className={classNames(styles.card, { [styles.featured]: plan.badge })}
-            >
-              {plan.badge && <span className={styles.badge}>{plan.badge}</span>}
+            <article key={plan._key || i} className={styles.card}>
               <h3 className={styles.planTitle}>{plan.title}</h3>
 
               {plan.price && (
@@ -134,28 +138,9 @@ export const Pricing = ({
               <PriceTable table={plan.table} />
 
               {plan.footnote && <p className={styles.footnote}>{plan.footnote}</p>}
-
-              {plan.componentButtonLabel && plan.componentButtonLink && (
-                <div className={styles.cardButton}>
-                  <Button to={plan.componentButtonLink} theme={plan.badge ? "teal" : "navy"} width="full">
-                    {plan.componentButtonLabel}
-                  </Button>
-                </div>
-              )}
             </article>
           ))}
         </div>
-
-        {(paymentsTitle || paymentsItems.length > 0) && (
-          <div className={styles.payments}>
-            {paymentsTitle && <h3 className={styles.paymentsTitle}>{paymentsTitle}</h3>}
-            <ul className={styles.paymentsList}>
-              {paymentsItems.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -167,20 +152,17 @@ Pricing.propTypes = {
     PropTypes.shape({
       _key: PropTypes.string,
       title: PropTypes.string,
-      badge: PropTypes.string,
       price: PropTypes.string,
       priceNote: PropTypes.string,
       description: PropTypes.string,
       features: PropTypes.arrayOf(PropTypes.shape({ text: PropTypes.string, included: PropTypes.bool })),
       table: PropTypes.object,
       footnote: PropTypes.string,
-      componentButtonLabel: PropTypes.string,
-      componentButtonLink: PropTypes.string,
     })
   ),
-  paymentsTitle: PropTypes.string,
-  paymentsItems: PropTypes.arrayOf(PropTypes.string),
-  componentBgColor: PropTypes.oneOf(["white", "navy"]),
+  componentButtonLabel: PropTypes.string,
+  componentButtonLink: PropTypes.string,
+  componentBgColor: PropTypes.oneOf(["white", "offWhite", "teal", "navy"]),
   removeTopPadding: PropTypes.bool,
   removeBottomPadding: PropTypes.bool,
 };

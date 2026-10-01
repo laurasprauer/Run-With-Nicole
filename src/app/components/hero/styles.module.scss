@@ -1,0 +1,109 @@
+.container {
+  position: relative;
+  @include section-bg;
+  @include section-padding-toggles;
+}
+
+// Optional full-bleed background photo with two overlay layers (one pseudo-element):
+//  1. a near-black navy shade, darkest at the top behind the header links, for contrast
+//  2. the brand navy → sky → teal gradient, semi-transparent so the photo shows through
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+
+  > div {
+    height: 100%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: linear-gradient(
+      140deg,
+      color-alpha("--color-navy", 0.8) 40%,
+      color-alpha("--color-sky", 0.8) 100%
+    );
+  }
+}
+
+.hasBackgroundImage .wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.wrapper {
+  @include container;
+  @include section-padding;
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+
+  @include media($small, down) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.75rem;
+  }
+}
+
+// Round profile photo with a teal → sky gradient ring (the ring is the padding
+// showing the gradient background behind the image).
+.photo {
+  flex: 0 0 auto;
+  width: 17.5rem;
+  height: 17.5rem;
+  padding: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-teal), var(--color-sky));
+
+  @include media($medium-highest, down) {
+    width: 14rem;
+    height: 14rem;
+  }
+
+  @include media($small, down) {
+    width: 11.25rem;
+    height: 11.25rem;
+    padding: 5px;
+  }
+
+  > div {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Text fills the rest of the content column so it lines up with the page edges
+.body {
+  flex: 1 1 0;
+  min-width: 0;
+
+  p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+
+    @include media($small, down) {
+      font-size: 1.0625rem;
+    }
+  }
+}
+
+.buttonWrapper {
+  margin-top: 2rem;
+}

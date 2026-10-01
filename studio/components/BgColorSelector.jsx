@@ -7,6 +7,8 @@ import {Box, Flex, Grid, Text} from '@sanity/ui'
 // getButtonTheme.js, and the schema's options.list in pageType.js.
 const OPTIONS = [
   {value: 'white', label: 'White', color: '#ffffff'},
+  {value: 'offWhite', label: 'Off-white', color: '#f3f8fa'},
+  {value: 'teal', label: 'Teal', color: '#4ad5bb'},
   {value: 'navy', label: 'Navy', color: '#266090'},
 ]
 

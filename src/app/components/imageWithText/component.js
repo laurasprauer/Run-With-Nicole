@@ -6,6 +6,7 @@ import CustomImage from "@components/customImage/component.js";
 import Button from "@components/button/component.js";
 import { portableTextComponents } from "@utils/portableTextComponents.js";
 import { getButtonTheme } from "@utils/getButtonTheme.js";
+import { getSanityRect } from "@utils/getSanityRect.js";
 import { getSectionClasses } from "@utils/getSectionClasses.js";
 
 import * as styles from "./styles.module.scss";
@@ -15,11 +16,16 @@ import * as styles from "./styles.module.scss";
 //               the section edge-to-edge (full-bleed), cropped with object-fit: cover.
 //  - "contain": image sits INSIDE .wrapper (within the max-width column) as a flex
 //               item, scaled with object-fit: contain — nothing is cropped.
+//  - "containOffset": contain + a teal → sky color block offset behind the image
+//               (a ::before on .offsetFrame, which shrink-wraps the image).
 // With no image uploaded the text simply runs full width.
 export const ImageWithText = ({
   body,
   imageUrl,
   imageAlt,
+  imageCrop,
+  imageWidth,
+  imageHeight,
   leftOrRight = "right",
   imageFit = "cover",
   componentButtonLabel,
@@ -29,7 +35,8 @@ export const ImageWithText = ({
   removeBottomPadding,
 }) => {
   const hasImage = Boolean(imageUrl);
-  const isContain = imageFit === "contain";
+  const hasOffsetBlock = imageFit === "containOffset";
+  const isContain = imageFit === "contain" || hasOffsetBlock;
   const side = leftOrRight === "left" ? "left" : "right";
 
   const containerClasses = getSectionClasses(
@@ -39,19 +46,25 @@ export const ImageWithText = ({
       [styles.hasImage]: hasImage,
       [styles.imageFitContain]: isContain,
       [styles.imageFitCover]: !isContain,
+      [styles.imageOffsetBlock]: hasOffsetBlock,
       [styles.imageLeft]: side === "left",
       [styles.imageRight]: side === "right",
     }
   );
 
+  const customImage = hasImage ? (
+    <CustomImage
+      basePath={imageUrl}
+      alt={imageAlt}
+      rect={getSanityRect(imageCrop, imageWidth, imageHeight)}
+      widths={isContain ? [400, 700, 1000] : [500, 800, 1100, 1500]}
+      sizes={isContain ? "(max-width: 999px) 100vw, 620px" : "(max-width: 1140px) 100vw, 50vw"}
+    />
+  ) : null;
+
   const image = hasImage ? (
     <div className={classNames(styles.componentImage, styles[side])}>
-      <CustomImage
-        basePath={imageUrl}
-        alt={imageAlt}
-        widths={isContain ? [400, 700, 1000] : [500, 800, 1100, 1500]}
-        sizes={isContain ? "(max-width: 999px) 100vw, 620px" : "(max-width: 1140px) 100vw, 50vw"}
-      />
+      {hasOffsetBlock ? <div className={styles.offsetFrame}>{customImage}</div> : customImage}
     </div>
   ) : null;
 
@@ -85,11 +98,19 @@ ImageWithText.propTypes = {
   body: PropTypes.array,
   imageUrl: PropTypes.string,
   imageAlt: PropTypes.string,
+  imageCrop: PropTypes.shape({
+    top: PropTypes.number,
+    bottom: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number,
+  }),
+  imageWidth: PropTypes.number,
+  imageHeight: PropTypes.number,
   leftOrRight: PropTypes.oneOf(["left", "right"]),
-  imageFit: PropTypes.oneOf(["cover", "contain"]),
+  imageFit: PropTypes.oneOf(["cover", "contain", "containOffset"]),
   componentButtonLabel: PropTypes.string,
   componentButtonLink: PropTypes.string,
-  componentBgColor: PropTypes.oneOf(["white", "navy"]),
+  componentBgColor: PropTypes.oneOf(["white", "offWhite", "teal", "navy"]),
   removeTopPadding: PropTypes.bool,
   removeBottomPadding: PropTypes.bool,
 };

@@ -42,11 +42,6 @@ export const navigationType = defineType({
       type: 'string',
       validation: (rule) => rule.email(),
     }),
-    defineField({
-      name: 'footerSlogan',
-      title: 'Footer slogan',
-      type: 'string',
-    }),
   ],
   preview: {prepare: () => ({title: 'Header & Footer'})},
 })

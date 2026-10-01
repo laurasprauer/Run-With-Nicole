@@ -2,11 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 
-import VideoHero from "@components/videoHero/component.js";
+import Hero from "@components/hero/component.js";
 import ImageWithText from "@components/imageWithText/component.js";
 import IconBoxes from "@components/iconBoxes/component.js";
+import TextBoxes from "@components/textBoxes/component.js";
 import Pricing from "@components/pricing/component.js";
 import ContactForm from "@components/contactForm/component.js";
+import CtaBanner from "@components/ctaBanner/component.js";
 import ClientWrapper from "./clientWrapper.js";
 
 // Shared by every section component.
@@ -23,13 +25,21 @@ const sectionProps = (item) => ({
 // Adding a component: add it here, in studio/schemaTypes/pageType.js, and in CLAUDE.md.
 const renderComponent = (item, index) => {
   switch (item.pageComponent) {
-    case "videoHero":
+    case "hero":
       return (
-        <VideoHero
+        <Hero
           {...sectionProps(item)}
-          backgroundVideoUrl={item.backgroundVideo?.asset?.url}
-          fallbackImageUrl={item.fallbackImage?.asset?.url}
-          fallbackImageAlt={item.fallbackImage?.alt}
+          imageUrl={item.componentImage?.asset?.url}
+          imageAlt={item.componentImage?.alt}
+          imageHotspot={item.componentImage?.hotspot}
+          imageCrop={item.componentImage?.crop}
+          imageWidth={item.componentImage?.asset?.width}
+          imageHeight={item.componentImage?.asset?.height}
+          backgroundImageUrl={item.backgroundImage?.asset?.url}
+          backgroundImageCrop={item.backgroundImage?.crop}
+          backgroundImageWidth={item.backgroundImage?.asset?.width}
+          backgroundImageHeight={item.backgroundImage?.asset?.height}
+          backgroundImageHotspot={item.backgroundImage?.hotspot}
         />
       );
     case "imageWithText":
@@ -38,23 +48,29 @@ const renderComponent = (item, index) => {
           {...sectionProps(item)}
           imageUrl={item.componentImage?.asset?.url}
           imageAlt={item.componentImage?.alt}
+          imageCrop={item.componentImage?.crop}
+          imageWidth={item.componentImage?.asset?.width}
+          imageHeight={item.componentImage?.asset?.height}
           leftOrRight={item.leftOrRight}
           imageFit={item.imageFit}
         />
       );
     case "iconBoxes":
       return <IconBoxes {...sectionProps(item)} boxes={item.boxes} showStepNumbers={item.showStepNumbers} />;
+    case "textBoxes":
+      return <TextBoxes {...sectionProps(item)} textBoxItems={item.textBoxItems} />;
     case "pricing":
+      return <Pricing {...sectionProps(item)} plans={item.plans} />;
+    case "ctaBanner":
+      return <CtaBanner {...sectionProps(item)} downloadFileUrl={item.downloadFile?.asset?.url} />;
+    case "contactForm":
       return (
-        <Pricing
+        <ContactForm
           {...sectionProps(item)}
-          plans={item.plans}
-          paymentsTitle={item.paymentsTitle}
-          paymentsItems={item.paymentsItems}
+          successMessage={item.successMessage}
+          submitButtonLabel={item.submitButtonLabel}
         />
       );
-    case "contactForm":
-      return <ContactForm {...sectionProps(item)} successMessage={item.successMessage} />;
     default:
       if (process.env.NODE_ENV === "development") {
         console.warn(`MainContent: unknown pageComponent "${item.pageComponent}" at index ${index}`);

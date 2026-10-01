@@ -6,10 +6,46 @@
   z-index: 100;
   height: var(--header-height);
   background-color: var(--color-white);
-  transition: box-shadow var(--transition);
+  transition: box-shadow var(--transition), height var(--transition), background-color var(--transition);
 
   &.scrolled {
     box-shadow: var(--box-shadow);
+  }
+
+  // Top of a content page: no background — the first section (color or image) shows
+  // through. Solid white returns as soon as the page scrolls or the mobile menu opens.
+  &.transparent {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  // Desktop only — past COMPACT_AFTER px: shorter header, smaller logo. Page content
+  // isn't moved; the header just overlays a little less of it. Below $full-navigation the
+  // header is always the small size (--header-height: 4rem) and never changes on scroll.
+  @include media($full-navigation) {
+    &.compact {
+      height: 4.5rem;
+    }
+  }
+}
+
+// Dark overlay behind the open mobile menu; tapping it closes the menu.
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99; // just under the header
+  background-color: color-alpha("--color-navy-black", 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+
+  &.overlayOpen {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @include media($full-navigation) {
+    display: none;
   }
 }
 
@@ -24,11 +60,29 @@
 
 .logo {
   display: block;
-  height: 3rem;
+  height: 4.25rem;
   flex-shrink: 0;
+  transition: height var(--transition);
 
-  @include media($small, down) {
-    height: 2.625rem;
+  // Hover: "Run With Nicole" text + underline turn navy on a light header
+  // (white/off-white/solid); white on a dark one — see .transparentDark below.
+  @include hover {
+    :global(.logoText),
+    :global(.logoLine) {
+      fill: var(--color-navy);
+    }
+  }
+
+  // Mobile: always the small size
+  @include media($full-navigation, down) {
+    height: 2.75rem;
+  }
+
+  // Desktop: shrinks with the compact header
+  @include media($full-navigation) {
+    .compact & {
+      height: 3.25rem;
+    }
   }
 }
 
@@ -44,27 +98,53 @@
 
 .link {
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   letter-spacing: 0.02em;
   text-decoration: none;
   color: var(--color-navy);
 
   @include hover {
-    color: var(--color-sky);
+    color: var(--color-navy);
   }
 }
 
-.buttonLink {
-  padding: 0.5625rem 1.375rem;
-  border-radius: 999px;
-  background-color: var(--color-navy);
-  color: var(--color-white);
-  transition: background-color var(--transition);
+// Underline that draws in from the left: on hover, and while the link's section is
+// the one being viewed (.active, set from scroll position / last click).
+.label {
+  position: relative;
+  display: inline-block;
 
-  @include hover {
-    background-color: var(--color-teal);
-    color: var(--color-navy-dark);
+  .link &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.375rem;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-sky));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
   }
+
+  .link.active &::after {
+    transform: scaleX(1);
+  }
+
+  @media (hover: hover) {
+    .link:hover &::after,
+    .link:focus-visible &::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+// Button links (e.g. Contact) render the shared Button component (always the teal
+// theme, incl. its light-teal hover) — only header-specific sizing lives here. `.nav`
+// raises specificity above the Button's own size padding.
+.nav .headerButton {
+  padding: 0.3125rem 1.25rem; // roomier in the mobile menu — see below
 }
 
 // ------------------------------------------------------------
@@ -135,7 +215,6 @@
     left: 0;
     right: 0;
     background-color: var(--color-white);
-    box-shadow: var(--box-shadow);
     visibility: hidden;
     opacity: 0;
     transform: translateY(-0.5rem);
@@ -156,10 +235,13 @@
 
     li {
       border-bottom: 1px solid var(--color-border);
+      text-align: center;
 
       &:last-child {
         border-bottom: none;
         padding-top: 1rem;
+        display: flex;
+        justify-content: center;
       }
     }
   }
@@ -168,10 +250,40 @@
     display: block;
     padding: 1rem 0;
     font-size: 1.0625rem;
+    text-align: center;
   }
 
-  .buttonLink {
-    text-align: center;
-    padding: 0.875rem 1.375rem;
+  .nav .headerButton {
+    width: 100%;
+    max-width: 16rem;
+    padding: 0.625rem 1.75rem;
+  }
+}
+
+// ------------------------------------------------------------
+// Transparent over a dark first section (navy or background image): light text + logo
+
+.transparentDark {
+  .logo :global(.logoRunner) {
+    fill: var(--color-white);
+  }
+
+  .logo {
+    @include hover {
+      :global(.logoText),
+      :global(.logoLine) {
+        fill: var(--color-white);
+      }
+    }
+  }
+
+  .link {
+    color: var(--color-white);
+  }
+
+  .menuToggle span,
+  .menuToggle span::before,
+  .menuToggle span::after {
+    background-color: var(--color-white);
   }
 }

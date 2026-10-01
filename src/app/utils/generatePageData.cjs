@@ -7,7 +7,7 @@ const { client, rewriteSanityUrls } = require("./sanityBuildClient.cjs");
 const { DEFAULT_SEO } = require("./defaultSEO.cjs");
 
 // Image projection shared by every image field.
-const IMAGE = `{ alt, asset->{ url, "width": metadata.dimensions.width, "height": metadata.dimensions.height } }`;
+const IMAGE = `{ alt, crop, hotspot, asset->{ url, "width": metadata.dimensions.width, "height": metadata.dimensions.height } }`;
 
 const PAGE_QUERY = `*[_type == "page" && defined(slug.current)]{
   _id,
@@ -20,15 +20,14 @@ const PAGE_QUERY = `*[_type == "page" && defined(slug.current)]{
   mainContent[]{
     ...,
     componentImage ${IMAGE},
-    fallbackImage ${IMAGE},
-    backgroundVideo { asset->{ url } }
+    backgroundImage ${IMAGE},
+    downloadFile { asset->{ url, originalFilename } }
   }
 }`;
 
 const NAVIGATION_QUERY = `*[_type == "navigation"][0]{
   links[]{ _key, label, link, displayAsButton },
-  footerEmail,
-  footerSlogan
+  footerEmail
 }`;
 
 async function getAllData() {

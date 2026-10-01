@@ -6,10 +6,12 @@ import {IconSelector} from '../components/IconSelector'
 // Page component types. Keep in sync with the registry in
 // src/app/components/mainContent/component.js.
 const COMPONENTS = [
-  {title: 'Video Hero', value: 'videoHero'},
+  {title: 'Hero (profile photo)', value: 'hero'},
   {title: 'Image With Text', value: 'imageWithText'},
   {title: 'Icon Boxes', value: 'iconBoxes'},
+  {title: 'Text Boxes', value: 'textBoxes'},
   {title: 'Pricing', value: 'pricing'},
+  {title: 'Banner (text + button)', value: 'ctaBanner'},
   {title: 'Contact Form', value: 'contactForm'},
 ]
 const componentLabel = (value) => COMPONENTS.find((c) => c.value === value)?.title || value
@@ -163,9 +165,8 @@ export const pageType = defineType({
               title: 'Background color',
               type: 'string',
               initialValue: 'white',
-              options: {list: ['white', 'navy']},
+              options: {list: ['white', 'offWhite', 'teal', 'navy']},
               components: {input: BgColorSelector},
-              hidden: ({parent}) => parent?.pageComponent === 'videoHero',
             }),
             defineField({
               name: 'body',
@@ -174,24 +175,20 @@ export const pageType = defineType({
               of: [richText()],
             }),
 
-            // --- Video Hero ---
+            // --- Image (Hero: round profile photo — set the hotspot to frame the face;
+            //     Image With Text: see position/fit below) ---
+            imageWithAlt('componentImage', 'Image', onlyFor('hero', 'imageWithText')),
             defineField({
-              name: 'backgroundVideo',
-              title: 'Background video',
-              type: 'file',
-              options: {accept: 'video/mp4'},
+              name: 'backgroundImage',
+              title: 'Background image (optional)',
+              type: 'image',
+              options: {hotspot: true},
               description:
-                'Muted, looping MP4 (desktop only). Keep it short and small — ideally under 10 MB.',
-              hidden: onlyFor('videoHero'),
+                'Covers the whole hero behind the photo and text, with a navy → sky → teal color overlay. Overrides the background color. The header sits on top of it at the top of the page.',
+              hidden: onlyFor('hero'),
             }),
-            imageWithAlt(
-              'fallbackImage',
-              'Fallback image',
-              onlyFor('videoHero')
-            ),
 
             // --- Image With Text ---
-            imageWithAlt('componentImage', 'Image', onlyFor('imageWithText')),
             defineField({
               name: 'leftOrRight',
               title: 'Image position',
@@ -214,8 +211,9 @@ export const pageType = defineType({
               initialValue: 'cover',
               options: {
                 list: [
-                  {title: 'Cover — fills half the section edge-to-edge (may crop)', value: 'cover'},
-                  {title: 'Contain — whole image shown, inside the content column', value: 'contain'},
+                  {title: 'Cover — fills half the section, edge to edge (may crop)', value: 'cover'},
+                  {title: 'Contain — shows the full image, no cropping', value: 'contain'},
+                  {title: 'Contain with color block — full image, with a teal-to-sky block set behind it', value: 'containOffset'},
                 ],
                 layout: 'radio',
               },
@@ -252,6 +250,26 @@ export const pageType = defineType({
               ],
             }),
 
+            // --- Text Boxes ---
+            defineField({
+              name: 'textBoxItems',
+              title: 'Boxes',
+              type: 'array',
+              description: 'Shown 2 per row (stacked on phones).',
+              hidden: onlyFor('textBoxes'),
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  name: 'textBox',
+                  fields: [
+                    defineField({name: 'title', type: 'string'}),
+                    defineField({name: 'body', title: 'Text', type: 'array', of: [richText()]}),
+                  ],
+                  preview: {select: {title: 'title'}},
+                }),
+              ],
+            }),
+
             // --- Pricing ---
             defineField({
               name: 'plans',
@@ -264,11 +282,6 @@ export const pageType = defineType({
                   name: 'plan',
                   fields: [
                     defineField({name: 'title', type: 'string', validation: (rule) => rule.required()}),
-                    defineField({
-                      name: 'badge',
-                      type: 'string',
-                      description: 'Optional label that highlights this card, e.g. "Most popular".',
-                    }),
                     defineField({name: 'price', type: 'string', description: 'e.g. "$150" or "From $150"'}),
                     defineField({name: 'priceNote', type: 'string', description: 'e.g. "/ month"'}),
                     defineField({name: 'description', type: 'text', rows: 3}),
@@ -345,33 +358,30 @@ export const pageType = defineType({
                       ],
                     }),
                     defineField({name: 'footnote', type: 'text', rows: 2}),
-                    defineField({name: 'componentButtonLabel', title: 'Button label', type: 'string'}),
-                    defineField({
-                      name: 'componentButtonLink',
-                      title: 'Button link',
-                      type: 'string',
-                      description: 'e.g. #contact',
-                    }),
                   ],
                   preview: {select: {title: 'title', subtitle: 'price'}},
                 }),
               ],
             }),
+
+            // --- Banner ---
             defineField({
-              name: 'paymentsTitle',
-              title: 'Payments title',
-              type: 'string',
-              hidden: onlyFor('pricing'),
-            }),
-            defineField({
-              name: 'paymentsItems',
-              title: 'Payments details',
-              type: 'array',
-              of: [defineArrayMember({type: 'string'})],
-              hidden: onlyFor('pricing'),
+              name: 'downloadFile',
+              title: 'Download file (optional)',
+              type: 'file',
+              description:
+                'e.g. the waiver PDF. When set, the button downloads this file (and the Button link is ignored).',
+              hidden: onlyFor('ctaBanner'),
             }),
 
             // --- Contact Form ---
+            defineField({
+              name: 'submitButtonLabel',
+              title: 'Submit button label',
+              type: 'string',
+              description: 'Text on the form\'s submit button. Defaults to "Send Inquiry".',
+              hidden: onlyFor('contactForm'),
+            }),
             defineField({
               name: 'successMessage',
               title: 'Success message',
@@ -381,19 +391,19 @@ export const pageType = defineType({
               hidden: onlyFor('contactForm'),
             }),
 
-            // --- Button (hero + image with text) ---
+            // --- Button (hero, image with text, pricing, banner) ---
             defineField({
               name: 'componentButtonLabel',
               title: 'Button label',
               type: 'string',
-              hidden: onlyFor('videoHero', 'imageWithText'),
+              hidden: onlyFor('hero', 'imageWithText', 'pricing', 'ctaBanner'),
             }),
             defineField({
               name: 'componentButtonLink',
               title: 'Button link',
               type: 'string',
               description: 'e.g. #contact or https://…',
-              hidden: onlyFor('videoHero', 'imageWithText'),
+              hidden: onlyFor('hero', 'imageWithText', 'pricing', 'ctaBanner'),
             }),
 
             // --- Spacing ---
@@ -402,14 +412,12 @@ export const pageType = defineType({
               title: 'Remove top padding',
               type: 'boolean',
               initialValue: false,
-              hidden: ({parent}) => parent?.pageComponent === 'videoHero',
             }),
             defineField({
               name: 'removeBottomPadding',
               title: 'Remove bottom padding',
               type: 'boolean',
               initialValue: false,
-              hidden: ({parent}) => parent?.pageComponent === 'videoHero',
             }),
           ],
           preview: {

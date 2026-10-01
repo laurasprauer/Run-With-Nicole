@@ -5,8 +5,8 @@ import SVG from "@components/svg/component.js";
 
 import * as styles from "./styles.module.scss";
 
-// Logo, contact email, slogan and copyright. Intentionally no nav links.
-export const Footer = ({ email, slogan }) => {
+// Logo, contact email and copyright. Intentionally no nav links.
+export const Footer = ({ email }) => {
   const year = new Date().getFullYear();
 
   return (
@@ -16,8 +16,6 @@ export const Footer = ({ email, slogan }) => {
           <SVG name="logo" />
         </Link>
 
-        {slogan && <p className={styles.slogan}>{slogan}</p>}
-
         {email && (
           <a href={`mailto:${email}`} className={styles.email}>
             <span className={styles.emailIcon}>
@@ -26,10 +24,8 @@ export const Footer = ({ email, slogan }) => {
             {email}
           </a>
         )}
-      </div>
 
-      <div className={styles.bottom}>
-        <p>© {year} Run With Nicole. All rights reserved.</p>
+        <p className={styles.copyright}>© {year} Run With Nicole. All rights reserved.</p>
       </div>
     </footer>
   );
@@ -37,7 +33,6 @@ export const Footer = ({ email, slogan }) => {
 
 Footer.propTypes = {
   email: PropTypes.string,
-  slogan: PropTypes.string,
 };
 
 export default Footer;

@@ -40,22 +40,26 @@
 }
 
 .box {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 2rem 1.75rem;
-  border-radius: var(--border-radius-lg);
+  // Top padding = normal 2rem + the 8px accent bar
+  padding: calc(2rem + 8px) 1.75rem 2rem;
+  // Square top corners so the accent bar runs straight edge to edge
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
   background-color: var(--color-off-white);
-  border-top: 4px solid var(--color-teal);
 
-  // Alternate accent between the two brand blues
-  &:nth-child(even) {
-    border-top-color: var(--color-sky);
-
-    .iconWrapper {
-      background-color: color-alpha("--color-sky", 0.15);
-      color: var(--color-sky);
-    }
+  // Teal → sky gradient bar across the top (a pseudo-element, because a gradient
+  // border-image would drop the rounded bottom corners)
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-sky));
   }
 }
 
@@ -67,8 +71,9 @@
   height: 64px;
   border-radius: 50%;
   margin-bottom: 1.25rem;
-  background-color: color-alpha("--color-teal", 0.18);
-  color: var(--color-teal-dark);
+  // White icon on the same teal → sky gradient as the top bar
+  background: linear-gradient(135deg, var(--color-teal), var(--color-sky));
+  color: var(--color-white);
 
   svg {
     width: 32px;
@@ -91,20 +96,15 @@
   color: var(--color-text-muted);
 }
 
+// On off-white, cards turn white so they still stand out
+.offWhite .box {
+  background-color: var(--color-white);
+}
+
 // On navy, cards become translucent panels
 .navy {
   .box {
     background-color: color-alpha("--color-white", 0.08);
-  }
-
-  .iconWrapper,
-  .box:nth-child(even) .iconWrapper {
-    background-color: color-alpha("--color-white", 0.12);
-    color: var(--color-teal);
-  }
-
-  .box:nth-child(even) .iconWrapper {
-    color: var(--color-sky);
   }
 
   .step {

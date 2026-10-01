@@ -16,17 +16,20 @@
 }
 
 // Standard vertical rhythm for a section's .wrapper.
+// --section-offset-top is 0 except on the first section of a page with a transparent
+// header, where it adds room for the header the section slides under (see
+// `.has-transparent-header` in global-styles.scss).
 @mixin section-padding {
-  padding-top: 5.5rem;
+  padding-top: calc(5.5rem + var(--section-offset-top, 0px));
   padding-bottom: 5.5rem;
 
   @include media($medium-highest, down) {
-    padding-top: 4rem;
+    padding-top: calc(4rem + var(--section-offset-top, 0px));
     padding-bottom: 4rem;
   }
 
   @include media($small, down) {
-    padding-top: 3rem;
+    padding-top: calc(3rem + var(--section-offset-top, 0px));
     padding-bottom: 3rem;
   }
 }
@@ -39,6 +42,37 @@
   &.white {
     background-color: var(--color-white);
     color: var(--color-text);
+  }
+
+  &.offWhite {
+    background-color: var(--color-off-white);
+    color: var(--color-text);
+  }
+
+  // Teal: white text is too low-contrast here, so everything is dark navy
+  &.teal {
+    background-color: var(--color-teal);
+    color: var(--color-navy-dark);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    li {
+      color: var(--color-navy-dark);
+    }
+
+    a:not([data-button]) {
+      color: var(--color-navy-dark);
+      text-decoration: underline;
+
+      @include hover {
+        color: var(--color-teal-light);
+      }
+    }
   }
 
   &.navy {
@@ -69,7 +103,7 @@
 // Section-level padding toggles (removeTopPadding / removeBottomPadding props).
 @mixin section-padding-toggles($wrapper: ".wrapper") {
   &.removeTopPadding #{$wrapper} {
-    padding-top: 0;
+    padding-top: var(--section-offset-top, 0px);
   }
 
   &.removeBottomPadding #{$wrapper} {

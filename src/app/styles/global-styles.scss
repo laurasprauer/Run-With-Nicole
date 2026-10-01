@@ -12,6 +12,14 @@
   }
 }
 
+// Mobile header (below $full-navigation) is always the small size — it doesn't shrink
+// on scroll (header/styles.module.scss)
+@include media($full-navigation, down) {
+  :root {
+    --header-height: 4rem;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   // Anchor links (#how-it-works etc.) land below the fixed header
@@ -114,10 +122,13 @@ h2 {
   }
 }
 
+// h3 is sky on light backgrounds; navy sections turn it white (section-bg mixin),
+// and light cards inside navy sections set it back to sky.
 h3 {
   font-size: 1.625rem;
   line-height: 1.25;
   margin-bottom: 0.625rem;
+  color: var(--color-sky);
 
   @include media($small, down) {
     font-size: 1.375rem;
@@ -164,14 +175,27 @@ p {
 
 .logoLine {
   fill: var(--color-sky);
+  transition: fill var(--transition);
 }
 
 .logoRunner {
   fill: var(--color-logo-blue);
+  transition: fill var(--transition);
 }
 
 .logoText {
   fill: var(--color-teal);
+  transition: fill var(--transition);
+}
+
+// --------------------------------------------------------
+// Transparent header: the first section slides up under the fixed header (so its
+// background color/image shows behind it) and gets extra top padding to make room.
+// Set on <main> by src/pages/[[...slug]].js; see header/component.js.
+
+.has-transparent-header > section:first-child {
+  margin-top: calc(-1 * var(--header-height));
+  --section-offset-top: var(--header-height);
 }
 
 // --------------------------------------------------------

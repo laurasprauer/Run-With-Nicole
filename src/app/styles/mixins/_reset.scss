@@ -5,12 +5,10 @@
   padding: 0;
 }
 
+// Strips list bullets/indent. Deliberately doesn't touch <li> padding — a nested
+// `li { padding: 0 }` here would out-rank component classes like `.box` on the <li>.
 @mixin reset-list {
   margin: 0;
   padding: 0;
   list-style: none;
-
-  li {
-    padding: 0;
-  }
 }

@@ -1,0 +1,48 @@
+.container {
+  @include section-bg;
+  @include section-padding-toggles;
+}
+
+// Banner rhythm: a bit slimmer than a regular section
+.wrapper {
+  @include container;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding-top: calc(3.5rem + var(--section-offset-top, 0px));
+  padding-bottom: 3.5rem;
+
+  @include media($small, down) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding-top: calc(2.75rem + var(--section-offset-top, 0px));
+    padding-bottom: 2.75rem;
+  }
+}
+
+.body {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin-bottom: 0.375rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a:not([data-button]) {
+    font-weight: 600;
+  }
+}
+
+.buttonWrapper {
+  flex: 0 0 auto;
+}

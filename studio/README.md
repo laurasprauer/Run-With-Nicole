@@ -10,7 +10,7 @@ npm run deploy       # manual deploy (normally done by Netlify)
 
 Needs `studio/.env`: `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`. On Netlify, `../on-deploy.mjs` writes this file.
 
-- `schemaTypes/pageType.js`: pages and their sections (Video Hero, Image With Text, Icon Boxes, Pricing, Contact Form). Keep it in sync with `src/app/components/mainContent/component.js`.
+- `schemaTypes/pageType.js`: pages and their sections (Hero, Image With Text, Icon Boxes, Text Boxes, Pricing, Banner, Contact Form). Keep it in sync with `src/app/components/mainContent/component.js`.
 - `schemaTypes/navigationType.js`: the **Header & Footer** singleton (id `navigation`).
 - `components/BgColorSelector.jsx`: the section background swatches.
 - `components/IconSelector.jsx`: the icon picker. It mirrors `src/app/components/svg/svgs.js`.

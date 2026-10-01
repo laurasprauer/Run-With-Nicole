@@ -6,9 +6,11 @@ $color: (
   // Brand
   "--color-teal": #4ad5bb,
   "--color-teal-dark": #2fb39b,
+  "--color-teal-light": #99fdeb, // hover: teal buttons + inline links on teal backgrounds
   "--color-sky": #2fbcd0,
   "--color-navy": #266090,
   "--color-navy-dark": #1b4669,
+  "--color-navy-black": #0b1c2c, // near-black navy, for darkening overlays
 
   // The runner in the logo — intentionally a touch different from --color-navy
   "--color-logo-blue": #276ba4,

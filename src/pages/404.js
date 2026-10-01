@@ -29,7 +29,7 @@ export default function Custom404({ navigation }) {
       <main>
         <NotFound />
       </main>
-      <Footer email={navigation.footerEmail} slogan={navigation.footerSlogan} />
+      <Footer email={navigation.footerEmail} />
     </>
   );
 }

@@ -1,0 +1,52 @@
+.container {
+  @include section-bg;
+  @include section-padding-toggles;
+}
+
+.wrapper {
+  @include container;
+  @include section-padding;
+}
+
+// Text Boxes usually sit right under a text section (e.g. "How this works" with its
+// bottom padding removed). "Remove top padding" leaves a small gap instead of none.
+.container.removeTopPadding .wrapper {
+  padding-top: calc(2.5rem + var(--section-offset-top, 0px));
+
+  @include media($small, down) {
+    padding-top: calc(2rem + var(--section-offset-top, 0px));
+  }
+}
+
+.intro {
+  margin-bottom: 2.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+
+  @include media($small, down) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Plain dashed outline all the way around
+.box {
+  padding: 2rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--border-radius-lg);
+
+  @include media($small, down) {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+.navy .box {
+  border-color: color-alpha("--color-white", 0.35);
+}
+
+.title {
+  margin-bottom: 0.75rem;
+}

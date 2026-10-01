@@ -6,7 +6,7 @@ One-page website for **Run With Nicole** — running coaching by Nicole, RRCA Le
 - **Content:** Sanity Studio (`studio/`) → https://runwithnicole.sanity.studio
 - **Inquiry form:** Netlify Forms → email to runwithnicole.la@gmail.com
 
-Sections: Video Hero · How This Works · Process steps · About Coach Nicole · Pricing · Inquiry Form. Header links scroll to each section.
+Sections: Hero (profile photo) · About Coach Nicole · How it Works (+ question boxes) · Process steps · Pricing · Paperwork · Inquiry Form. Header links scroll to each section.
 
 > Working with Claude Code? See [CLAUDE.md](./CLAUDE.md) for architecture and conventions.
 
@@ -104,13 +104,20 @@ Add it in **Domain management**, then update `NEXT_PUBLIC_SITE_URL`.
 
 ## Editing content (for Nicole)
 
-- **Studio:** https://runwithnicole.sanity.studio → **Pages → Home** holds the page sections, and **Header & Footer** holds the menu links, email and slogan.
+- **Studio:** https://runwithnicole.sanity.studio → **Pages → Home** holds the page sections, and **Header & Footer** holds the menu links and footer email.
 - **Publish:** click **Publish** and the live site rebuilds automatically (about 1–2 minutes).
-- **Section backgrounds:** each section has a **Background color** picker (White / Navy).
+- **Section backgrounds:** each section has a **Background color** picker (White / Off-white / Teal / Navy).
 
-### Adding photos and video
+### Waiver / downloadable files
 
-- **Hero video:** Home → *Hero* section → **Background video** (MP4, muted loop, ideally under 10 MB). Also add a **Fallback image**, which shows on phones.
-- **How this works image:** *How this works* section → **Image** (fit: Contain, so the whole image shows).
-- **About photo:** *About Coach Nicole* section → **Image** (fit: Cover, so it fills half the section).
+The **Paperwork** section is a Banner. Upload the waiver PDF to its **Download file** field and the **Download Waiver** button appears and downloads it. The button stays hidden until a file (or a Button link) is set.
+
+### Adding photos
+
+- **Hero profile photo:** Home → *Hero* section → **Image**. It's shown as a circle. Click **Edit** (crop icon) on the image to set the **crop** (zoom in on the face) and **hotspot** (the focus point); the circle follows both.
+- **Image With Text photos** (e.g. *About Coach Nicole*): the section's **Image**, with **Image fit**:
+  - **Cover:** fills half the section edge to edge (may crop).
+  - **Contain:** the whole image, inside the content column.
+  - **Contain + offset color block:** like Contain, with a teal → sky block peeking out behind the image. Use a plain photo, since images with color blocks already baked in will clash.
+- **Cropping:** click the crop icon on any image to trim it. The site uses your crop.
 - Always fill in **Alt text** with a short description of the image.

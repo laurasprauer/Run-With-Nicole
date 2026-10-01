@@ -9,7 +9,7 @@
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "import-seed": "sanity dataset import seed/home.ndjson production --missing"
+    "import-seed": "sanity dataset import seed/home.ndjson --dataset production --missing"
   },
   "dependencies": {
     "@sanity/icons": "^3.7.4",

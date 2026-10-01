@@ -29,12 +29,13 @@ const INITIAL_VALUES = {
 };
 
 const validate = (values) => {
+  // Order matches the form layout, so the first error gets focus
   const errors = {};
-  if (!values.name.trim()) errors.name = "Please enter your first and last name.";
-  if (!values.age) errors.age = "Please enter your age.";
-  else if (Number(values.age) < 1 || Number(values.age) > 120) errors.age = "Please enter a valid age.";
+  if (!values.name.trim()) errors.name = "Please enter your full name.";
   if (!values.email.trim()) errors.email = "Please enter your email address.";
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errors.email = "Please enter a valid email address.";
+  if (!values.age) errors.age = "Please enter your age.";
+  else if (Number(values.age) < 1 || Number(values.age) > 120) errors.age = "Please enter a valid age.";
   if (!values.trainingForRace) errors.trainingForRace = "Please choose yes or no.";
   if (values.trainingForRace === "Yes") {
     if (!values.raceDistance) errors.raceDistance = "Please choose a race distance.";
@@ -47,6 +48,7 @@ const validate = (values) => {
 export const ContactForm = ({
   body,
   successMessage,
+  submitButtonLabel,
   componentBgColor,
   removeTopPadding,
   removeBottomPadding,
@@ -132,8 +134,7 @@ export const ContactForm = ({
         <div className={styles.formCard}>
           {status === "success" ? (
             <div className={styles.success} role="status">
-              <h3>Thank you!</h3>
-              <p>{successMessage || "Your inquiry has been sent. I'll be in touch soon!"}</p>
+              <p>{successMessage || "Thanks for reaching out! I'll be in touch soon."}</p>
             </div>
           ) : (
             <form name={FORM_NAME} onSubmit={handleSubmit} noValidate className={styles.form}>
@@ -144,48 +145,52 @@ export const ContactForm = ({
                 </label>
               </p>
 
+              {/* Row 1: name + email */}
               <div className={styles.row}>
                 <div className={classNames(styles.field, styles.grow)}>
-                  <label htmlFor="inquiry-name">First and last name *</label>
+                  <label htmlFor="inquiry-name">Full name *</label>
                   <input type="text" autoComplete="name" {...fieldProps("name")} />
                   {errorFor("name")}
                 </div>
-                <div className={classNames(styles.field, styles.small)}>
+                <div className={classNames(styles.field, styles.grow)}>
+                  <label htmlFor="inquiry-email">Email address *</label>
+                  <input type="email" autoComplete="email" {...fieldProps("email")} />
+                  {errorFor("email")}
+                </div>
+              </div>
+
+              {/* Row 2: age + training for a race */}
+              <div className={styles.row}>
+                <div className={classNames(styles.field, styles.grow)}>
                   <label htmlFor="inquiry-age">Age *</label>
                   <input type="number" inputMode="numeric" min="1" max="120" {...fieldProps("age")} />
                   {errorFor("age")}
                 </div>
+                <fieldset
+                  className={classNames(styles.field, styles.grow)}
+                  aria-describedby={errors.trainingForRace ? "inquiry-trainingForRace-error" : undefined}
+                >
+                  <legend>Are you training for a race? *</legend>
+                  <div className={styles.radios}>
+                    {["Yes", "No"].map((option) => (
+                      <label key={option} className={styles.radio}>
+                        <input
+                          type="radio"
+                          id={option === "Yes" ? "inquiry-trainingForRace" : undefined}
+                          name="trainingForRace"
+                          value={option}
+                          checked={values.trainingForRace === option}
+                          onChange={handleChange}
+                        />
+                        <span>{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errorFor("trainingForRace")}
+                </fieldset>
               </div>
 
-              <div className={styles.field}>
-                <label htmlFor="inquiry-email">Email address *</label>
-                <input type="email" autoComplete="email" {...fieldProps("email")} />
-                {errorFor("email")}
-              </div>
-
-              <fieldset
-                className={styles.field}
-                aria-describedby={errors.trainingForRace ? "inquiry-trainingForRace-error" : undefined}
-              >
-                <legend>Are you training for a race? *</legend>
-                <div className={styles.radios}>
-                  {["Yes", "No"].map((option) => (
-                    <label key={option} className={styles.radio}>
-                      <input
-                        type="radio"
-                        id={option === "Yes" ? "inquiry-trainingForRace" : undefined}
-                        name="trainingForRace"
-                        value={option}
-                        checked={values.trainingForRace === option}
-                        onChange={handleChange}
-                      />
-                      <span>{option}</span>
-                    </label>
-                  ))}
-                </div>
-                {errorFor("trainingForRace")}
-              </fieldset>
-
+              {/* Only when training for a race: distance + date */}
               {values.trainingForRace === "Yes" && (
                 <div className={styles.row}>
                   <div className={classNames(styles.field, styles.grow)}>
@@ -208,12 +213,14 @@ export const ContactForm = ({
                 </div>
               )}
 
+              {/* Row 3 */}
               <div className={styles.field}>
                 <label htmlFor="inquiry-coachGoals">What are you looking for in a coach? *</label>
                 <textarea rows={5} maxLength={2000} {...fieldProps("coachGoals")} />
                 {errorFor("coachGoals")}
               </div>
 
+              {/* Row 4 */}
               <div className={styles.field}>
                 <label htmlFor="inquiry-referralSource">How did you hear about me?</label>
                 <input type="text" {...fieldProps("referralSource")} />
@@ -228,10 +235,9 @@ export const ContactForm = ({
               <Button
                 type="submit"
                 theme="navy"
-                size="large"
                 disabled={status === "submitting"}
               >
-                {status === "submitting" ? "Sending…" : "Send Inquiry"}
+                {status === "submitting" ? "Sending…" : submitButtonLabel || "Send Inquiry"}
               </Button>
             </form>
           )}
@@ -244,7 +250,8 @@ export const ContactForm = ({
 ContactForm.propTypes = {
   body: PropTypes.array,
   successMessage: PropTypes.string,
-  componentBgColor: PropTypes.oneOf(["white", "navy"]),
+  submitButtonLabel: PropTypes.string,
+  componentBgColor: PropTypes.oneOf(["white", "offWhite", "teal", "navy"]),
   removeTopPadding: PropTypes.bool,
   removeBottomPadding: PropTypes.bool,
 };

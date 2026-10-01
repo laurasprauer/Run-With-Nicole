@@ -7,6 +7,9 @@
   border-radius: 999px;
   font-family: var(--font-family);
   font-weight: 700;
+  font-size: 1rem;
+  // Explicit so <a> and <button> buttons are the same height (buttons don't inherit it)
+  line-height: 1.5;
   letter-spacing: 0.02em;
   text-decoration: none;
   cursor: pointer;
@@ -37,9 +40,10 @@
   border-color: var(--color-teal);
   color: var(--color-navy-dark);
 
+  // Same light teal everywhere (light or dark backgrounds, header included)
   @include hover {
-    background-color: var(--color-white);
-    border-color: var(--color-white);
+    background-color: var(--color-teal-light);
+    border-color: var(--color-teal-light);
     color: var(--color-navy-dark);
   }
 }

@@ -4,7 +4,7 @@ $misc: (
   "--font-family": (var(--font-open-sans), "Open Sans", Arial, sans-serif),
   // Open Sans is a variable font with a width (wdth) axis — 75% = Open Sans Condensed
   "--font-stretch-condensed": 75%,
-  "--header-height": 4.5rem,
+  "--header-height": 5.5rem, // 4rem below $full-navigation — see global-styles.scss
   "--border-radius-sm": 4px,
   "--border-radius-lg": 12px,
   "--transition": 0.3s,

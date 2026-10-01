@@ -14,6 +14,13 @@
   text-align: center;
 }
 
+// Section button (e.g. "Get Started") between the intro and the cards
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin: -1rem 0 3rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -34,16 +41,24 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 2.25rem 2rem 2rem;
-  border-radius: var(--border-radius-lg);
+  // Top padding = normal 2.25rem + the 8px accent bar
+  padding: calc(2.25rem + 8px) 2rem 2rem;
+  // Square top corners so the accent bar runs straight edge to edge
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
-  border-top: 6px solid var(--color-sky);
-  box-shadow: var(--box-shadow);
+  border-top: 0;
 
-  &.featured {
-    border-top-color: var(--color-teal);
-    box-shadow: var(--box-shadow-darker);
+  // Dark navy → blue gradient bar across the top (same technique as Icon Boxes,
+  // which use teal → sky). Extends 1px past each side to cover the card border.
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -1px;
+    right: -1px;
+    height: 8px;
+    background: linear-gradient(90deg, var(--color-navy-dark), var(--color-logo-blue));
   }
 }
 
@@ -62,8 +77,8 @@
     color: var(--color-text);
   }
 
-  .planTitle {
-    color: var(--color-navy);
+  h3.planTitle {
+    color: var(--color-sky);
   }
 
   .description,
@@ -74,15 +89,6 @@
   }
 }
 
-.badge {
-  @include eyebrow;
-  align-self: flex-start;
-  margin-bottom: 0.75rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  background-color: var(--color-teal);
-  color: var(--color-navy-dark);
-}
 
 .planTitle {
   font-size: 1.75rem;
@@ -245,66 +251,3 @@
   color: var(--color-text-muted);
 }
 
-.cardButton {
-  margin-top: auto;
-  padding-top: 1.25rem;
-}
-
-// ------------------------------------------------------------
-// Payments bar
-
-.payments {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem 2rem;
-  margin-top: 2.5rem;
-  padding: 1.25rem 2rem;
-  border-radius: var(--border-radius-lg);
-  border: 1px dashed var(--color-border);
-
-  @include media($medium, down) {
-    max-width: 40rem;
-    margin-left: auto;
-    margin-right: auto;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.navy .payments {
-  border-color: color-alpha("--color-white", 0.35);
-}
-
-.paymentsTitle {
-  font-size: 1.375rem;
-  margin: 0;
-}
-
-.paymentsList {
-  @include reset-list;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-
-  li {
-    position: relative;
-    font-size: 0.9375rem;
-    padding-left: 1rem;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0.65em;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: var(--color-teal);
-    }
-  }
-
-  @include media($medium, down) {
-    flex-direction: column;
-  }
-}

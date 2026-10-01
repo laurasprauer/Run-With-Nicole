@@ -14,7 +14,7 @@ $contain-row: 1000px;
 }
 
 .body {
-  max-width: 48rem;
+  // Beside an image the text is 50% wide (below); with no image it spans the full column.
 
   h2 {
     margin-bottom: 1.5rem;
@@ -138,6 +138,84 @@ $contain-row: 1000px;
       @include media($contain-row) {
         max-height: 640px;
       }
+    }
+  }
+}
+
+// ------------------------------------------------------------
+// Contain + offset color block — a gradient block peeks out from behind the image,
+// shifted down and toward the outer edge (bottom-right when the image is on the
+// right, bottom-left when it's on the left).
+
+$offset: 1.5rem;
+
+.imageOffsetBlock.hasImage {
+  .componentImage {
+    display: flex;
+    justify-content: center;
+    // Room for the block so it never overflows the column
+    padding-bottom: $offset;
+  }
+
+  &.imageRight .componentImage {
+    padding-right: $offset;
+  }
+
+  &.imageLeft .componentImage {
+    padding-left: $offset;
+  }
+
+  // Shrink-wraps the image so the block matches its real edges (no letterboxing)
+  .offsetFrame {
+    position: relative;
+    isolation: isolate; // lets ::before sit behind the image with z-index: -1
+    width: fit-content;
+    max-width: 100%;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(135deg, var(--color-teal), var(--color-sky));
+      transform: translate($offset, $offset);
+    }
+
+    img {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      object-fit: initial;
+    }
+  }
+
+  &.imageLeft .offsetFrame::before {
+    transform: translate(-$offset, $offset);
+  }
+
+  @include media($small, down) {
+    $offset-small: 1rem;
+
+    .componentImage,
+    &.imageRight .componentImage,
+    &.imageLeft .componentImage {
+      padding-bottom: $offset-small;
+    }
+
+    &.imageRight .componentImage {
+      padding-right: $offset-small;
+    }
+
+    &.imageLeft .componentImage {
+      padding-left: $offset-small;
+    }
+
+    .offsetFrame::before {
+      transform: translate($offset-small, $offset-small);
+    }
+
+    &.imageLeft .offsetFrame::before {
+      transform: translate(-$offset-small, $offset-small);
     }
   }
 }

@@ -18,19 +18,20 @@ export const Button = ({
   type = "button",
   disabled,
   className,
+  ...rest // extra attributes, e.g. aria-current
 }) => {
   const classes = classNames(styles.container, styles[theme], styles[size], styles[width], className);
 
   if (!to) {
     return (
-      <button type={type} className={classes} onClick={onClick} disabled={disabled} data-button>
+      <button type={type} className={classes} onClick={onClick} disabled={disabled} data-button {...rest}>
         {children}
       </button>
     );
   }
 
   return (
-    <CustomLink to={to} target={target} className={classes} onClick={onClick} data-button>
+    <CustomLink to={to} target={target} className={classes} onClick={onClick} data-button {...rest}>
       {children}
     </CustomLink>
   );

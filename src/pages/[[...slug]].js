@@ -32,11 +32,22 @@ export async function getStaticProps({ params }) {
   };
 }
 
+// The header is transparent at the top of content pages and shows the first
+// section's background. "dark" = navy or a background image → light header text.
+const getTransparentHeaderTheme = (page) => {
+  const first = page?.mainContent?.[0];
+  if (!first) return null;
+  const isDark = first.componentBgColor === "navy" || Boolean(first.backgroundImage?.asset?.url);
+  return isDark ? "dark" : "light";
+};
+
 export default function Page({ page, navigation, slug }) {
+  const transparentTheme = getTransparentHeaderTheme(page);
+
   return (
     <>
-      <Header links={navigation.links} />
-      <main>
+      <Header links={navigation.links} transparentTheme={transparentTheme} />
+      <main className={transparentTheme ? "has-transparent-header" : undefined}>
         {page ? (
           <MainContent data={page.mainContent} seo={page.seo} slug={slug} />
         ) : (
@@ -48,7 +59,7 @@ export default function Page({ page, navigation, slug }) {
           </>
         )}
       </main>
-      <Footer email={navigation.footerEmail} slogan={navigation.footerSlogan} />
+      <Footer email={navigation.footerEmail} />
     </>
   );
 }

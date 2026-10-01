@@ -23,19 +23,19 @@
     fill: var(--color-white);
   }
 
+  // Hover on the dark footer: text + underline turn white too
+  @include hover {
+    :global(.logoText),
+    :global(.logoLine) {
+      fill: var(--color-white);
+    }
+  }
+
   @include media($small, down) {
     height: 4.5rem;
   }
 }
 
-.slogan {
-  margin: 0;
-  font-stretch: var(--font-stretch-condensed);
-  font-weight: 700;
-  font-size: 1.625rem;
-  letter-spacing: 0.02em;
-  color: var(--color-teal);
-}
 
 .email {
   display: inline-flex;
@@ -62,14 +62,8 @@
   }
 }
 
-.bottom {
-  border-top: 1px solid color-alpha("--color-white", 0.15);
-  padding: 1.25rem;
-  text-align: center;
-
-  p {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: color-alpha("--color-white", 0.7);
-  }
+.copyright {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: color-alpha("--color-white", 0.7);
 }
