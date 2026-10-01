@@ -36,6 +36,7 @@ const renderComponent = (item, index) => {
           imageWidth={item.componentImage?.asset?.width}
           imageHeight={item.componentImage?.asset?.height}
           backgroundImageUrl={item.backgroundImage?.asset?.url}
+          backgroundImageAlt={item.backgroundImage?.alt}
           backgroundImageCrop={item.backgroundImage?.crop}
           backgroundImageWidth={item.backgroundImage?.asset?.width}
           backgroundImageHeight={item.backgroundImage?.asset?.height}

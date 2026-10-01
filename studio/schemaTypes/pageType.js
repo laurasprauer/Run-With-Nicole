@@ -167,6 +167,8 @@ export const pageType = defineType({
               initialValue: 'white',
               options: {list: ['white', 'offWhite', 'teal', 'navy']},
               components: {input: BgColorSelector},
+              // Banners are always teal (their target decoration is designed for it)
+              hidden: ({parent}) => parent?.pageComponent === 'ctaBanner',
             }),
             defineField({
               name: 'body',
@@ -186,6 +188,14 @@ export const pageType = defineType({
               description:
                 'Covers the whole hero behind the photo and text, with a navy → sky → teal color overlay. Overrides the background color. The header sits on top of it at the top of the page.',
               hidden: onlyFor('hero'),
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt text',
+                  type: 'string',
+                  description: 'Describe the photo (used by search engines).',
+                }),
+              ],
             }),
 
             // --- Image With Text ---

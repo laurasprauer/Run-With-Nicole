@@ -33,6 +33,7 @@ All four outputs are **generated and git-ignored**.
 - Shared Sanity config for the scripts: `src/app/utils/sanityBuildClient.cjs`. It **exits with a readable error** if a required env var is missing or still a `your-…` placeholder.
 - Dev refresh: `src/proxy.js` (Next 16's name for middleware) calls `src/pages/api/dev-regenerate.js` on page reloads during `npm run dev` (3s cooldown), so Studio edits show up on refresh.
 - GROQ lives in `generatePageData.cjs`. Images are projected as `{ alt, crop, hotspot, asset->{ url, width, height } }`. When adding a Sanity field that needs dereferencing (images, files), update `PAGE_QUERY`.
+- **SEO asset filenames:** `addVanityFilenames()` in `generatePageData.cjs` appends each asset's slugified `originalFilename` to its URL (Sanity "vanity filenames": `…/<id>-800x1000.jpg/coach-nicole-running-marathon.jpg`; params like `?w=`, `?rect=`, `?dl=` still work, and `?dl=` downloads use the vanity name). Rename files in the Studio media library to change them. Asset docs also carry `title` / `altText` / `description`; the `<img alt>` on the site comes from the image field's own `alt` on each section.
 - On Netlify (`NETLIFY=true`) Sanity asset URLs are rewritten to `/sanity-images/*` and `/sanity-files/*`, which `public/_redirects` proxies to `cdn.sanity.io` (same-origin assets).
 
 ## Deploy (Netlify)
@@ -83,7 +84,7 @@ Registry: `src/app/components/mainContent/component.js` (`renderComponent` switc
 | `iconBoxes` | `IconBoxes` | Grid of icon cards (4 → 2 → 1 columns), optional "Step N" labels. Square top corners + 8px teal → sky gradient bar (`::before`); white icons on a teal → sky gradient circle. |
 | `textBoxes` | `TextBoxes` | Title + rich-text boxes, 2 per row (1 on phones), plain dashed outline. Field: `textBoxItems[]`. "Remove top padding" leaves a small 2.5rem gap (not 0) so boxes can sit under a text section. |
 | `pricing` | `Pricing` | Intro text (heading + payment terms), one section button (`componentButtonLabel/Link`, e.g. Get Started → #contact), then 3 equal plan cards (title, price, ✓/✗ features, optional price table — collapsible via `<details>`, footnote). Cards have square top corners and an 8px navy-dark → logo-blue gradient bar (`::before`), no shadow. |
-| `ctaBanner` | `CtaBanner` | Full-width callout band (its own section, usually Teal): rich text left + one button right (button theme from the bg), slimmer padding (3.5rem); stacks centered on phones. Optional `downloadFile` (Sanity file): the button downloads it via `?dl=` (e.g. the waiver PDF); otherwise uses `componentButtonLink`; neither → no button. |
+| `ctaBanner` | `CtaBanner` | Full-width callout band, **always teal** (the Studio hides Background color for banners and the component ignores `componentBgColor`; no bg image) with a diagonal `--color-teal-bright` → `--color-teal-soft` gradient (135deg, 0% → 60%). Rich text left + one navy button right; slimmer padding (3.5rem); stacks centered on phones. Decorative CSS "target" behind the button (`.target`, 35% opacity: outer ring, `::before` middle ring at inset 12% with a radial glow, `::after` solid bullseye at inset 34%; 35rem / 45px lines on every screen size; `--color-teal-light` at different opacities via `--target-*` vars; stacking rings z 0 < text z 2 < button z 3). Optional `downloadFile` (Sanity file): the button downloads it via `?dl=` (e.g. the waiver PDF); otherwise uses `componentButtonLink`; neither → no button. |
 | `contactForm` | `ContactForm` | Intro text above a full-width Netlify Forms inquiry form (see below). Form card: square top corners + teal → sky gradient bar; white on off-white/navy sections. |
 
 Every section is wrapped in `<section id={containerId}>` — that id is what header links (`#pricing`) scroll to.
@@ -103,7 +104,8 @@ Adding a component: build it in `src/app/components/`, add a `case` in `mainCont
 | --- | --- | --- |
 | `--color-teal` | `#4AD5BB` | Brand accent, logo wordmark, CTA buttons on navy |
 | `--color-teal-dark` | `#2FB39B` | Teal icons on light backgrounds |
-| `--color-teal-light` | `#99FDEB` | Hover for all teal buttons and for inline links on teal backgrounds |
+| `--color-teal-light` | `#99FDEB` | Hover for all teal buttons; banner target rings |
+| `--color-teal-bright` / `--color-teal-soft` | `#57EED2` / `#75DBC8` | Banner background gradient |
 | `--color-sky` | `#2FBCD0` | Brand accent, logo line, focus rings, **h3 on light backgrounds** |
 | `--color-navy` | `#266090` | h1/h2, navy sections, primary buttons |
 | `--color-navy-dark` | `#1B4669` | Hovers, footer |
@@ -125,7 +127,7 @@ Adding a component: build it in `src/app/components/`, add a `case` in `mainCont
 
 Sections take `componentBgColor: "white" | "offWhite" | "teal" | "navy"` (Sanity field with a swatch picker). Implementation:
 
-- `@include section-bg;` in the section's root `.container` (mixin in `mixins/_layout.scss`) defines `.white`, `.offWhite`, `.teal` and `.navy`. Teal makes headings/text/links dark navy (white is too low-contrast on teal); inline links hover to `--color-teal-light`. Navy forces white text on headings/p/li and teal links (buttons excluded via `[data-button]`).
+- `@include section-bg;` in the section's root `.container` (mixin in `mixins/_layout.scss`) defines `.white`, `.offWhite`, `.teal` and `.navy`. Teal makes headings/text/links dark navy (white is too low-contrast on teal); inline links hover from navy-dark to `--color-navy`. Navy forces white text on headings/p/li and teal links (buttons excluded via `[data-button]`).
 - `getSectionClasses(styles, props, extra)` (`@utils/getSectionClasses.js`) builds the class list incl. `removeTopPadding`/`removeBottomPadding` (paired with `@include section-padding-toggles;`).
 - `getButtonTheme(bg)` → `white: "navy"`, `offWhite: "navy"`, `teal: "navy"`, `navy: "teal"`.
 - Cards that default to off-white (icon boxes, form card) switch to white on `offWhite` sections (`.offWhite .box`, `.offWhite .formCard`) so they don't disappear.
@@ -178,6 +180,15 @@ Sections take `componentBgColor: "white" | "offWhite" | "teal" | "navy"` (Sanity
 - Seed: `studio/seed/home.ndjson` (home page with all copy + navigation). Import with `cd studio && npm run import-seed` (`--missing` = won't overwrite existing docs).
 - Studio host: `runwithnicole` → https://runwithnicole.sanity.studio (deployed by the Netlify build when `SANITY_AUTH_TOKEN` is set).
 - Studio only reads `SANITY_STUDIO_*` env vars from `studio/.env`.
+
+## SEO
+
+- **Meta:** `<title>` / description / canonical / Open Graph come from each page's Sanity SEO fields (`mainContent/component.js` `<Head>`), falling back to `src/app/utils/defaultSEO.cjs`. Keep descriptions ≤ ~155 characters. No default share image yet — set **SEO → Share image** in Sanity (1200×630).
+- **Structured data:** `src/app/utils/structuredData.js` builds JSON-LD for the home page (rendered in `[[...slug]].js`): `WebSite`, a `ProfessionalService` (no street address — `areaServed` lists Hermosa/Manhattan/Redondo Beach, South Bay, LA & Orange County; email from the footer field; offers parsed from the Pricing plans — two-column price tables become one offer per row, "From $X" → `minPrice`, "/ month" → `UnitPriceSpecification`) and the coach `Person` (RRCA credential, South Bay Runners Club). Facts not in Sanity live in its `BUSINESS` constant — keep them in sync with the copy. Validate with Google's Rich Results Test after edits.
+- **Images:** `CustomImage` renders `width`/`height` attributes (the crop's size when `rect` is set, else the asset's) so the browser reserves space (no layout shift). Pass `width`/`height` from the asset metadata when adding new image usages. Alt text comes from each image field's `alt` (hero background included); decorative-only images should still get alt text in Sanity.
+- **Subtitles:** any `h2` directly after an `h1` (e.g. the hero's "Your Hermosa Beach Running Coach") is a lead-in subtitle — global `h1 + h2` rule in `global-styles.scss`: 1.875rem / 2.25rem, `margin-top: -0.75rem`, decorative "• •" before and after (`content: … / ""` so screen readers skip them); 1.5rem on phones, no dots below 480px. The hero only sets its color: teal on navy, `--color-teal-light` over a background image, navy on light backgrounds.
+- **Icons:** `public/favicon.svg` (runner mark) + PNGs rendered from it: `favicon-32.png`, `favicon-48.png` (transparent), `apple-touch-icon.png` (180, white bg), `icon-192.png` / `icon-512.png` (white bg, used by `site.webmanifest` and as the JSON-LD logo). Linked in `_document.js`. If the logo changes, re-render them (headless Chrome screenshot of the SVG at each size works).
+- **Inline links** to RRCA, South Bay Runners Club and the B.A.A. (Boston/BQ) live in the Sanity rich text.
 
 ## Gotchas
 

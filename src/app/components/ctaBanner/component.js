@@ -8,8 +8,9 @@ import { getSectionClasses } from "@utils/getSectionClasses.js";
 
 import * as styles from "./styles.module.scss";
 
-// Full-width callout band (its own section — usually Teal): text on the left, one button
-// on the right, stacked and centered on phones.
+// Full-width callout band (its own section, always teal): text on the left, one button
+// on the right with an abstract "target" (concentric rings) behind it, stacked and
+// centered on phones.
 // The button downloads `downloadFileUrl` when a file is uploaded in Sanity (Sanity's
 // `?dl=` param forces a download with the original filename); otherwise it links to
 // `componentButtonLink`. No file and no link → no button.
@@ -18,12 +19,14 @@ export const CtaBanner = ({
   componentButtonLabel,
   componentButtonLink,
   downloadFileUrl,
-  componentBgColor,
   removeTopPadding,
   removeBottomPadding,
 }) => {
+  // Always teal: the target decoration is designed for it, so the Studio doesn't offer a
+  // background color for banners and any stored value is ignored.
+  const bgColor = "teal";
   const containerClasses = getSectionClasses(styles, {
-    componentBgColor,
+    componentBgColor: bgColor,
     removeTopPadding,
     removeBottomPadding,
   });
@@ -38,9 +41,11 @@ export const CtaBanner = ({
         </div>
         {componentButtonLabel && href && (
           <div className={styles.buttonWrapper}>
+            {/* Decorative target rings behind the button (CSS only) */}
+            <span className={styles.target} aria-hidden="true" />
             <Button
               to={href}
-              theme={getButtonTheme(componentBgColor)}
+              theme={getButtonTheme(bgColor)}
               {...(downloadFileUrl && { download: "" })}
             >
               {componentButtonLabel}
@@ -57,7 +62,6 @@ CtaBanner.propTypes = {
   componentButtonLabel: PropTypes.string,
   componentButtonLink: PropTypes.string,
   downloadFileUrl: PropTypes.string,
-  componentBgColor: PropTypes.oneOf(["white", "offWhite", "teal", "navy"]),
   removeTopPadding: PropTypes.bool,
   removeBottomPadding: PropTypes.bool,
 };

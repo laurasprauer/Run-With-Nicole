@@ -1,9 +1,20 @@
 .container {
+  position: relative;
+  overflow: hidden; // clips the target rings to the band
   @include section-bg;
   @include section-padding-toggles;
+
+  // The banner is always teal (no bg color/image option — the component forces
+  // componentBgColor="teal"), with a diagonal bright → soft teal gradient.
+  background: linear-gradient(135deg, var(--color-teal-bright) 0%, var(--color-teal-soft) 60%);
+
+  // Target colors — light teal at different strengths
+  --target-ring: #{color-alpha("--color-teal-light", 0.7)};
+  --target-ring-soft: #{color-alpha("--color-teal-light", 0.42)};
+  --target-glow: #{color-alpha("--color-teal-light", 0.28)};
+  --target-fill: #{color-alpha("--color-teal-light", 0.75)};
 }
 
-// Banner rhythm: a bit slimmer than a regular section
 .wrapper {
   @include container;
   display: flex;
@@ -16,13 +27,16 @@
   @include media($small, down) {
     flex-direction: column;
     text-align: center;
-    gap: 1.5rem;
+    gap: 1.75rem;
     padding-top: calc(2.75rem + var(--section-offset-top, 0px));
     padding-bottom: 2.75rem;
   }
 }
 
+// Text sits above the target rings (they can reach behind it, especially on phones)
 .body {
+  position: relative;
+  z-index: 2;
   flex: 1 1 auto;
   min-width: 0;
 
@@ -43,6 +57,55 @@
   }
 }
 
+// No z-index here on purpose: the rings and button stack against .body in the
+// section's own stacking order (rings 0 < text 2 < button 3).
 .buttonWrapper {
+  position: relative;
   flex: 0 0 auto;
+
+  > :not(.target) {
+    position: relative;
+    z-index: 3;
+  }
+}
+
+// ------------------------------------------------------------
+// Target: outer ring (with a soft glow) → middle ring → bullseye, all centered on the
+// button and drawn only in light teal at different opacities.
+
+.target {
+  // Same on every screen size
+  --size: 35rem;
+  --line: 45px;
+  opacity: 0.35; // the whole target is kept subtle
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border: var(--line) solid var(--target-ring-soft);
+
+  // Middle ring (with the soft glow inside it)
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    border: var(--line) solid var(--target-ring);
+    background: radial-gradient(circle, var(--target-glow) 0%, transparent 80%);
+  }
+
+  // Bullseye (solid fill, no outline)
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 34%;
+    border-radius: 50%;
+    background-color: var(--target-fill);
+  }
+
 }

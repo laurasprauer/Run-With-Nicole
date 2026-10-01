@@ -23,6 +23,7 @@ export const Hero = ({
   imageWidth,
   imageHeight,
   backgroundImageUrl,
+  backgroundImageAlt,
   backgroundImageCrop,
   backgroundImageWidth,
   backgroundImageHeight,
@@ -59,7 +60,9 @@ export const Hero = ({
         <div className={styles.background} aria-hidden="true">
           <CustomImage
             basePath={backgroundImageUrl}
-            alt=""
+            alt={backgroundImageAlt}
+            width={backgroundImageWidth}
+            height={backgroundImageHeight}
             rect={getSanityRect(backgroundImageCrop, backgroundImageWidth, backgroundImageHeight)}
             // Always anchored to the top; the hotspot (if set) only picks the horizontal focus
             objectPosition={`${backgroundImageHotspot ? Math.round(backgroundImageHotspot.x * 100) : 50}% 0%`}
@@ -79,6 +82,8 @@ export const Hero = ({
               sizes="(max-width: 719px) 180px, 280px"
               objectPosition={objectPosition}
               rect={rect}
+              width={imageWidth}
+              height={imageHeight}
               priority
             />
           </div>
@@ -112,6 +117,7 @@ Hero.propTypes = {
   imageWidth: PropTypes.number,
   imageHeight: PropTypes.number,
   backgroundImageUrl: PropTypes.string,
+  backgroundImageAlt: PropTypes.string,
   backgroundImageCrop: PropTypes.object,
   backgroundImageWidth: PropTypes.number,
   backgroundImageHeight: PropTypes.number,

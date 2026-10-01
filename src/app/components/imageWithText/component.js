@@ -57,6 +57,8 @@ export const ImageWithText = ({
       basePath={imageUrl}
       alt={imageAlt}
       rect={getSanityRect(imageCrop, imageWidth, imageHeight)}
+      width={imageWidth}
+      height={imageHeight}
       widths={isContain ? [400, 700, 1000] : [500, 800, 1100, 1500]}
       sizes={isContain ? "(max-width: 999px) 100vw, 620px" : "(max-width: 1140px) 100vw, 50vw"}
     />

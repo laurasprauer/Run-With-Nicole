@@ -1,0 +1,13 @@
+{
+  "name": "Run With Nicole",
+  "short_name": "Run With Nicole",
+  "description": "Running coaching in Hermosa Beach and the South Bay from RRCA-certified coach Nicole.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#266090",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

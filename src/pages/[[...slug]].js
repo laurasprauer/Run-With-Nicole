@@ -5,6 +5,7 @@ import Header from "@components/header/component.js";
 import Footer from "@components/footer/component.js";
 import MainContent from "@components/mainContent/component.js";
 import NotFound from "@components/notFound/component.js";
+import { buildStructuredData } from "@utils/structuredData.js";
 
 // Every page is built from public/static-page-data.json (written at build time by
 // src/app/utils/generatePageData.cjs). Nothing fetches Sanity in the browser.
@@ -43,9 +44,20 @@ const getTransparentHeaderTheme = (page) => {
 
 export default function Page({ page, navigation, slug }) {
   const transparentTheme = getTransparentHeaderTheme(page);
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/+$/, "");
+  const structuredData = slug === "/" ? buildStructuredData({ page, navigation, siteUrl }) : null;
 
   return (
     <>
+      {structuredData && (
+        <Head>
+          <script
+            type="application/ld+json"
+            // "<" is escaped so content can never close the script tag early
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
+          />
+        </Head>
+      )}
       <Header links={navigation.links} transparentTheme={transparentTheme} />
       <main className={transparentTheme ? "has-transparent-header" : undefined}>
         {page ? (

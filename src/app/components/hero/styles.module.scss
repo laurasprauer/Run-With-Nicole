@@ -90,6 +90,8 @@
 }
 
 // Text fills the rest of the content column so it lines up with the page edges
+// Subtitle sizing/dots for an h2 right after the h1 are global (global-styles.scss);
+// only its color is set here (bottom of file).
 .body {
   flex: 1 1 0;
   min-width: 0;
@@ -106,4 +108,21 @@
 
 .buttonWrapper {
   margin-top: 2rem;
+}
+
+// Subtitle color — `.container` beats the section-bg mixin's heading colors.
+// Teal on navy heroes, light teal over a background image, navy on light ones.
+.container .body h1 + h2 {
+  color: var(--color-teal);
+}
+
+// Over a background photo: the lighter teal reads better
+.container.hasBackgroundImage .body h1 + h2 {
+  color: var(--color-teal-light);
+}
+
+.container.white .body h1 + h2,
+.container.offWhite .body h1 + h2,
+.container.teal .body h1 + h2 {
+  color: var(--color-navy);
 }

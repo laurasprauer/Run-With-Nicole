@@ -17,6 +17,8 @@ export const CustomImage = ({
   className,
   objectPosition,
   rect,
+  width,
+  height,
   priority = false,
 }) => {
   const imgRef = useRef(null);
@@ -30,6 +32,12 @@ export const CustomImage = ({
   if (!basePath) return null;
 
   const base = rect ? `${basePath}?rect=${rect}&` : `${basePath}?`;
+
+  // Intrinsic size of what's actually shown (the crop, if any) → width/height
+  // attributes, so the browser reserves the right space before the image loads.
+  const [, , rectW, rectH] = rect ? rect.split(",").map(Number) : [];
+  const intrinsicW = rectW || width;
+  const intrinsicH = rectH || height;
   const srcSet = widths.map((w) => `${base}w=${w}&q=75&fm=webp ${w}w`).join(", ");
   const fullSize = `${base}w=${widths[widths.length - 1]}&q=75&fm=webp`;
   const lowQuality = `${base}w=${Math.round(widths[0] / 4)}&q=10&blur=60&fm=webp`;
@@ -47,6 +55,7 @@ export const CustomImage = ({
         srcSet={srcSet}
         sizes={sizes}
         alt={alt || ""}
+        {...(intrinsicW && intrinsicH && { width: intrinsicW, height: intrinsicH })}
         style={objectPosition ? { objectPosition } : undefined}
         className={classNames(styles.imageFull, { [styles.loaded]: loaded })}
         loading={priority ? "eager" : "lazy"}
@@ -65,6 +74,8 @@ CustomImage.propTypes = {
   className: PropTypes.string,
   objectPosition: PropTypes.string,
   rect: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
   priority: PropTypes.bool,
 };
 

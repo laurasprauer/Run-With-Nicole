@@ -3,7 +3,7 @@ const DEFAULT_SEO = {
   siteName: "Run With Nicole",
   title: "Run With Nicole | Running Coach in Hermosa Beach, CA",
   description:
-    "Personalized running coaching from Nicole, an RRCA Level 1 Certified Coach in Hermosa Beach, CA. Custom training plans, static race plans, and personal pacing for runners of all paces.",
+    "Personalized running coaching in Hermosa Beach & the South Bay from RRCA-certified coach Nicole. Custom plans, race plans & pacing for every pace.",
 };
 
 module.exports = { DEFAULT_SEO };

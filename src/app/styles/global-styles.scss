@@ -135,6 +135,47 @@ h3 {
   }
 }
 
+// Subtitle: an h2 directly after an h1 (e.g. the hero's "Your Hermosa Beach Running
+// Coach") is a smaller lead-in, tucked up under the h1, with decorative dots either side.
+h1 + h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-top: -0.75rem;
+
+  &::before,
+  &::after {
+    content: "\2022\2009\2022"; // • •
+    content: "\2022\2009\2022" / ""; // decorative — skipped by screen readers
+    display: inline-block;
+    font-size: 0.6em;
+    vertical-align: middle;
+    opacity: 0.7;
+  }
+
+  &::before {
+    margin-right: 0.6em;
+  }
+
+  &::after {
+    margin-left: 0.6em;
+  }
+
+  // Phones: a step smaller so the subtitle + dots fit on one line…
+  @include media($small, down) {
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    margin-top: -0.5rem;
+  }
+
+  // …and no dots on the narrowest screens, where they'd wrap onto their own line
+  @include media($x-small-highest, down) {
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+}
+
 h4,
 h5,
 h6 {
