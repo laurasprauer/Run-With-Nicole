@@ -63,29 +63,6 @@
   }
 }
 
-// Social icon link — 44px tap target around a 26px icon
-.social {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin: -0.5rem 0; // keep the column spacing tight despite the larger tap target
-  border-radius: 50%;
-  color: var(--color-white);
-  transition: color var(--transition), background-color var(--transition);
-
-  svg {
-    width: 1.625rem;
-    height: 1.625rem;
-  }
-
-  @include hover {
-    color: var(--color-teal);
-    background-color: color-alpha("--color-white", 0.08);
-  }
-}
-
 .copyright {
   margin: 0;
   font-size: 0.8125rem;

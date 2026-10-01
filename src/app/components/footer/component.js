@@ -5,6 +5,12 @@ import SVG from "@components/svg/component.js";
 
 import * as styles from "./styles.module.scss";
 
+// "https://www.instagram.com/run.with.nicole.la/" → "@run.with.nicole.la"
+const toInstagramHandle = (url = "") => {
+  const handle = url.replace(/^https?:\/\/(www\.)?instagram\.com\//i, "").split(/[/?#]/)[0];
+  return handle ? `@${handle}` : "Instagram";
+};
+
 // Logo, contact email, social icon(s) and copyright. Intentionally no nav links.
 export const Footer = ({ email, instagramUrl }) => {
   const year = new Date().getFullYear();
@@ -26,14 +32,12 @@ export const Footer = ({ email, instagramUrl }) => {
         )}
 
         {instagramUrl && (
-          <a
-            href={instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.social}
-            aria-label="Run With Nicole on Instagram (opens in a new tab)"
-          >
-            <SVG name="instagram" />
+          <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className={styles.email}>
+            <span className={styles.emailIcon}>
+              <SVG name="instagram" />
+            </span>
+            {toInstagramHandle(instagramUrl)}
+            <span className="sr-only"> on Instagram (opens in a new tab)</span>
           </a>
         )}
 
