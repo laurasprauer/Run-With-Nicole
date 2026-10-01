@@ -107,6 +107,8 @@ export const buildStructuredData = ({ page, navigation, siteUrl }) => {
   const pricing = sections.find((s) => s.pageComponent === "pricing");
   const photo = absolute(siteUrl, hero?.componentImage?.asset?.url);
   const email = navigation?.footerEmail;
+  // Social profiles → sameAs, so Google can connect the accounts to the business
+  const sameAs = [navigation?.instagramUrl].filter(Boolean);
 
   const businessId = `${pageUrl}#business`;
   const coachId = `${pageUrl}#coach`;
@@ -129,6 +131,7 @@ export const buildStructuredData = ({ page, navigation, siteUrl }) => {
         logo: `${siteUrl}/icon-512.png`,
         ...(photo && { image: photo }),
         ...(email && { email }),
+        ...(sameAs.length && { sameAs }),
         areaServed: BUSINESS.areaServed,
         knowsAbout: BUSINESS.knowsAbout,
         founder: { "@id": coachId },
@@ -156,7 +159,9 @@ export const buildStructuredData = ({ page, navigation, siteUrl }) => {
             url: BUSINESS.credential.issuerUrl,
           },
         },
-        memberOf: { "@type": "SportsClub", name: BUSINESS.club.name, url: BUSINESS.club.url },
+        // SportsOrganization (not SportsClub): SportsClub is a LocalBusiness subtype, so
+        // Google would list the club as a second business on the site.
+        memberOf: { "@type": "SportsOrganization", name: BUSINESS.club.name, url: BUSINESS.club.url },
       },
     ],
   };

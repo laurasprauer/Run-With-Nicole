@@ -81,6 +81,12 @@ a {
   }
 }
 
+// Inline links inside running text are bold (nav links, buttons and the footer email
+// have their own styles and aren't inside <p>)
+p a:not([data-button]) {
+  font-weight: 700;
+}
+
 // --------------------------------------------------------
 // Typography — h1–h3 are the "main headings": Open Sans Condensed
 // (same variable font, narrowed via font-stretch).
@@ -237,6 +243,50 @@ p {
 .has-transparent-header > section:first-child {
   margin-top: calc(-1 * var(--header-height));
   --section-offset-top: var(--header-height);
+}
+
+// --------------------------------------------------------
+// Keyboard focus — a clear ring for keyboard users (mouse clicks don't show it).
+// Navy by default (≥ 3:1 on white/off-white/teal); dark areas set --focus-ring to white
+// (navy sections via the section-bg mixin, dark transparent header, footer).
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring, var(--color-navy));
+  outline-offset: 3px;
+}
+
+// Programmatic focus targets (e.g. <main tabindex="-1"> after "Skip to content")
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+// Form fields already show their own focus ring (contactForm styles)
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+// "Skip to content" link — hidden until focused with the keyboard (first Tab on the page)
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-navy);
+  color: var(--color-white);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+
+  &:focus-visible {
+    transform: none;
+    color: var(--color-white);
+    outline-color: var(--color-teal); // visible over the dark hero and light pages
+  }
 }
 
 // --------------------------------------------------------

@@ -7,6 +7,7 @@ export const portableTextComponents = {
       return (
         <a href={href} {...(external && { target: "_blank", rel: "noopener noreferrer" })}>
           {children}
+          {external && <span className="sr-only"> (opens in a new tab)</span>}
         </a>
       );
     },

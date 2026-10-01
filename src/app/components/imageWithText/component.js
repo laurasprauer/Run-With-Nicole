@@ -52,21 +52,39 @@ export const ImageWithText = ({
     }
   );
 
+  const rect = getSanityRect(imageCrop, imageWidth, imageHeight);
+
+  // `sizes` = the width the image is actually shown at, so the browser downloads the
+  // smallest file that's sharp enough. Contain modes are capped by max-height (400px
+  // stacked, 640px side-by-side — see styles), so a portrait photo renders much
+  // narrower than its column: width = min(column, maxHeight × aspect ratio).
+  const [, , rectW, rectH] = rect ? rect.split(",").map(Number) : [];
+  const aspect = (rectW || imageWidth) && (rectH || imageHeight) ? (rectW || imageWidth) / (rectH || imageHeight) : 1;
+  const containSizes =
+    `(max-width: 999px) min(calc(100vw - 2.5rem), 600px, ${Math.round(400 * aspect)}px), ` +
+    `min(45vw, 540px, ${Math.round(640 * aspect)}px)`;
+
   const customImage = hasImage ? (
     <CustomImage
       basePath={imageUrl}
       alt={imageAlt}
-      rect={getSanityRect(imageCrop, imageWidth, imageHeight)}
+      rect={rect}
       width={imageWidth}
       height={imageHeight}
-      widths={isContain ? [400, 700, 1000] : [500, 800, 1100, 1500]}
-      sizes={isContain ? "(max-width: 999px) 100vw, 620px" : "(max-width: 1140px) 100vw, 50vw"}
+      widths={isContain ? [320, 480, 560, 640, 800, 1000] : [500, 800, 1100, 1500]}
+      sizes={isContain ? containSizes : "(max-width: 1140px) 100vw, 50vw"}
     />
   ) : null;
 
   const image = hasImage ? (
     <div className={classNames(styles.componentImage, styles[side])}>
-      {hasOffsetBlock ? <div className={styles.offsetFrame}>{customImage}</div> : customImage}
+      {hasOffsetBlock ? (
+        <div className={styles.offsetFrame} style={{ "--img-aspect": aspect }}>
+          {customImage}
+        </div>
+      ) : (
+        customImage
+      )}
     </div>
   ) : null;
 

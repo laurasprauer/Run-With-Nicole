@@ -84,6 +84,13 @@ const svgs = {
   heart: icon(<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />),
 
   // --- UI icons ---
+  instagram: icon(
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
+    </>
+  ),
   check: icon(<path d="M5 12.5l4.5 4.5L19 7" />),
   x: icon(<path d="M6 6l12 12M18 6L6 18" />),
   email: icon(

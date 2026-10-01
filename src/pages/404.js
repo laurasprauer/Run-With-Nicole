@@ -25,11 +25,14 @@ export default function Custom404({ navigation }) {
         <title>Page Not Found | Run With Nicole</title>
         <meta name="robots" content="noindex" />
       </Head>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <Header links={navigation.links} />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <NotFound />
       </main>
-      <Footer email={navigation.footerEmail} />
+      <Footer email={navigation.footerEmail} instagramUrl={navigation.instagramUrl} />
     </>
   );
 }

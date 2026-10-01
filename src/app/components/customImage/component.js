@@ -19,6 +19,7 @@ export const CustomImage = ({
   rect,
   width,
   height,
+  quality = 75,
   priority = false,
 }) => {
   const imgRef = useRef(null);
@@ -38,17 +39,21 @@ export const CustomImage = ({
   const [, , rectW, rectH] = rect ? rect.split(",").map(Number) : [];
   const intrinsicW = rectW || width;
   const intrinsicH = rectH || height;
-  const srcSet = widths.map((w) => `${base}w=${w}&q=75&fm=webp ${w}w`).join(", ");
-  const fullSize = `${base}w=${widths[widths.length - 1]}&q=75&fm=webp`;
+  const srcSet = widths.map((w) => `${base}w=${w}&q=${quality}&fm=webp ${w}w`).join(", ");
+  const fullSize = `${base}w=${widths[widths.length - 1]}&q=${quality}&fm=webp`;
   const lowQuality = `${base}w=${Math.round(widths[0] / 4)}&q=10&blur=60&fm=webp`;
 
   return (
     <div className={classNames(styles.imageWrapper, className)}>
-      <div
-        aria-hidden="true"
-        style={{ backgroundImage: `url(${lowQuality})` }}
-        className={classNames(styles.imageBlur, { [styles.loaded]: loaded })}
-      />
+      {/* Blurred preview while lazy images load. Skipped for priority (above-the-fold)
+          images — it would only be an extra download competing with the real image. */}
+      {!priority && (
+        <div
+          aria-hidden="true"
+          style={{ backgroundImage: `url(${lowQuality})` }}
+          className={classNames(styles.imageBlur, { [styles.loaded]: loaded })}
+        />
+      )}
       <img
         ref={imgRef}
         src={fullSize}
@@ -76,6 +81,7 @@ CustomImage.propTypes = {
   rect: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
+  quality: PropTypes.number,
   priority: PropTypes.bool,
 };
 

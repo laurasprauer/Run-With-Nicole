@@ -108,11 +108,13 @@ export const ContactForm = ({
     }
   };
 
+  const REQUIRED = ["name", "email", "age", "raceDistance", "raceDate", "coachGoals"];
   const fieldProps = (name) => ({
     id: `inquiry-${name}`,
     name,
     value: values[name],
     onChange: handleChange,
+    ...(REQUIRED.includes(name) && { "aria-required": "true" }),
     "aria-invalid": errors[name] ? "true" : undefined,
     "aria-describedby": errors[name] ? `inquiry-${name}-error` : undefined,
   });
@@ -167,6 +169,8 @@ export const ContactForm = ({
                   {errorFor("age")}
                 </div>
                 <fieldset
+                  role="radiogroup"
+                  aria-required="true"
                   className={classNames(styles.field, styles.grow)}
                   aria-describedby={errors.trainingForRace ? "inquiry-trainingForRace-error" : undefined}
                 >

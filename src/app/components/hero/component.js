@@ -66,8 +66,10 @@ export const Hero = ({
             rect={getSanityRect(backgroundImageCrop, backgroundImageWidth, backgroundImageHeight)}
             // Always anchored to the top; the hotspot (if set) only picks the horizontal focus
             objectPosition={`${backgroundImageHotspot ? Math.round(backgroundImageHotspot.x * 100) : 50}% 0%`}
-            widths={[800, 1400, 2000, 2600]}
+            // Under a dark overlay at reduced opacity, so lower quality is invisible
+            widths={[640, 800, 1200, 1600, 2000]}
             sizes="100vw"
+            quality={40}
             priority
           />
         </div>
@@ -78,8 +80,8 @@ export const Hero = ({
             <CustomImage
               basePath={imageUrl}
               alt={imageAlt}
-              widths={[200, 400, 600]}
-              sizes="(max-width: 719px) 180px, 280px"
+              widths={[200, 300, 400, 600]}
+              sizes="(max-width: 719px) 180px, (max-width: 1139px) 224px, 280px"
               objectPosition={objectPosition}
               rect={rect}
               width={imageWidth}

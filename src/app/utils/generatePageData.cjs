@@ -27,7 +27,8 @@ const PAGE_QUERY = `*[_type == "page" && defined(slug.current)]{
 
 const NAVIGATION_QUERY = `*[_type == "navigation"][0]{
   links[]{ _key, label, link, displayAsButton },
-  footerEmail
+  footerEmail,
+  instagramUrl
 }`;
 
 // SEO-friendly asset URLs: Sanity's CDN accepts a "vanity" filename after the asset path

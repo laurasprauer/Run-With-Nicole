@@ -184,11 +184,34 @@ Sections take `componentBgColor: "white" | "offWhite" | "teal" | "navy"` (Sanity
 ## SEO
 
 - **Meta:** `<title>` / description / canonical / Open Graph come from each page's Sanity SEO fields (`mainContent/component.js` `<Head>`), falling back to `src/app/utils/defaultSEO.cjs`. Keep descriptions ≤ ~155 characters. No default share image yet — set **SEO → Share image** in Sanity (1200×630).
-- **Structured data:** `src/app/utils/structuredData.js` builds JSON-LD for the home page (rendered in `[[...slug]].js`): `WebSite`, a `ProfessionalService` (no street address — `areaServed` lists Hermosa/Manhattan/Redondo Beach, South Bay, LA & Orange County; email from the footer field; offers parsed from the Pricing plans — two-column price tables become one offer per row, "From $X" → `minPrice`, "/ month" → `UnitPriceSpecification`) and the coach `Person` (RRCA credential, South Bay Runners Club). Facts not in Sanity live in its `BUSINESS` constant — keep them in sync with the copy. Validate with Google's Rich Results Test after edits.
+- **Structured data:** `src/app/utils/structuredData.js` builds JSON-LD for the home page (rendered in `[[...slug]].js`): `WebSite`, a `ProfessionalService` (no street address — `areaServed` lists Hermosa/Manhattan/Redondo Beach, South Bay, LA & Orange County; email from the footer field; offers parsed from the Pricing plans — two-column price tables become one offer per row, "From $X" → `minPrice`, "/ month" → `UnitPriceSpecification`) and the coach `Person` (RRCA credential; South Bay Runners Club as a `SportsOrganization` — not `SportsClub`, which is a LocalBusiness subtype Google would list as a second business). Facts not in Sanity live in its `BUSINESS` constant — keep them in sync with the copy. Validate with Google's Rich Results Test after edits.
 - **Images:** `CustomImage` renders `width`/`height` attributes (the crop's size when `rect` is set, else the asset's) so the browser reserves space (no layout shift). Pass `width`/`height` from the asset metadata when adding new image usages. Alt text comes from each image field's `alt` (hero background included); decorative-only images should still get alt text in Sanity.
 - **Subtitles:** any `h2` directly after an `h1` (e.g. the hero's "Your Hermosa Beach Running Coach") is a lead-in subtitle — global `h1 + h2` rule in `global-styles.scss`: 1.875rem / 2.25rem, `margin-top: -0.75rem`, decorative "• •" before and after (`content: … / ""` so screen readers skip them); 1.5rem on phones, no dots below 480px. The hero only sets its color: teal on navy, `--color-teal-light` over a background image, navy on light backgrounds.
 - **Icons:** `public/favicon.svg` (runner mark) + PNGs rendered from it: `favicon-32.png`, `favicon-48.png` (transparent), `apple-touch-icon.png` (180, white bg), `icon-192.png` / `icon-512.png` (white bg, used by `site.webmanifest` and as the JSON-LD logo). Linked in `_document.js`. If the logo changes, re-render them (headless Chrome screenshot of the SVG at each size works).
-- **Inline links** to RRCA, South Bay Runners Club and the B.A.A. (Boston/BQ) live in the Sanity rich text.
+- **Inline links** to RRCA, South Bay Runners Club and the B.A.A. (Boston/BQ) live in the Sanity rich text. Links inside paragraphs are bold site-wide (`p a:not([data-button])` in `global-styles.scss`).
+- **Social:** Header & Footer → **Instagram URL** (`navigation.instagramUrl`) renders an Instagram icon link in the footer (44px tap target, labelled for screen readers) and is added to the business JSON-LD as `sameAs`. Add new social fields the same way (schema → `NAVIGATION_QUERY` → `Footer` props → `sameAs`).
+
+## Performance
+
+- **Inlined CSS:** `scripts/inline-css.cjs` runs after `next build` (part of `npm run build`) and replaces each page's `<link rel="stylesheet">` (+ its preload) with an inline `<style>`, rewriting relative `url(../media/…)` font paths to absolute. Removes render-blocking requests (~10 KB gzipped CSS for this one-page site). If CSS grows a lot, revisit.
+- **Images:** pass accurate `sizes`/`widths` to `CustomImage` (imageWithText computes contain-mode `sizes` from the aspect ratio because portrait images are height-capped); priority (above-the-fold) images skip the blur placeholder; the hero background uses `quality={40}` (it's under a dark overlay). Always pass `width`/`height` so space is reserved.
+- **No shrink-to-fit around unloaded images:** a `width: fit-content` / `width: auto` image collapses to 0 until it loads → layout shift. The offset-block frame is sized explicitly: `width: min(100%, var(--contain-max-h) × var(--img-aspect))` with `--img-aspect` set inline.
+- **Fonts:** `next/font` Open Sans with `display: "optional"` (preloaded; no late swap → no reflow of the condensed headings).
+- **Links:** `next/link` uses `prefetch={false}` (logo, CustomLink) — on a one-page site prefetching `/` data is a wasted request.
+- **Netlify:** turn off the Netlify Drawer/toolbar on production — it injects ~500 ms of JS (shows up as `netlify-hud.js` / `scripts/hud` in Lighthouse).
+- Lighthouse locally: `npx lighthouse http://localhost:4173` against `out/` served by any static server (note: Python's http.server doesn't compress, so load metrics look worse than on Netlify).
+
+## Accessibility
+
+Audited with axe-core (WCAG 2.1/2.2 AA + best practices) at desktop, phone, and with the mobile menu open: 0 violations. Things to keep in mind:
+
+- **Contrast over images:** axe can't check text over photos — the hero's background-image overlay (35% `--color-navy-black` over the navy → sky gradient) was measured pixel-by-pixel to keep white text ≥ 4.5:1 (30% was the minimum). Re-check if the overlay is lightened or a much brighter photo is used.
+- **Translucent cards on navy** (icon boxes): text uses ≥ 92% white (`color-alpha("--color-white", 0.92)`) — 85% / 70% failed 4.5:1.
+- **Focus:** never remove outlines. Global `:focus-visible` ring (3px, offset 3px) in `--focus-ring`, default navy; dark contexts set it to white (`.navy` via the section-bg mixin, `.transparentDark` header, footer). Form fields keep their own ring. `reset-button` no longer strips `outline`.
+- **Skip link:** "Skip to content" (`.skip-link` in `global-styles.scss`) is the first focusable element on every page and jumps to `<main id="main-content" tabIndex={-1}>`.
+- **Forms:** labels on every field, `aria-required` on required inputs + `role="radiogroup" aria-required` on the Yes/No fieldset, errors linked with `aria-describedby`, submit error `role="alert"`, success `role="status"`.
+- **Links:** external rich-text links open in a new tab and include a visually hidden "(opens in a new tab)"; the header's active link has `aria-current="location"`; all SVGs are `aria-hidden` with labels on their links/buttons.
+- **Motion:** smooth scrolling is turned off under `prefers-reduced-motion`.
 
 ## Gotchas
 

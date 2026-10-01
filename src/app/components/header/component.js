@@ -120,7 +120,13 @@ export const Header = ({ links = [], transparentTheme = null }) => {
         })}
       >
         <div className={styles.inner}>
-          <Link href="/" className={styles.logo} aria-label="Run With Nicole — home" onClick={() => setMenuOpen(false)}>
+          <Link
+            href="/"
+            prefetch={false} // one-page site — prefetching "/" data is a wasted request
+            className={styles.logo}
+            aria-label="Run With Nicole — home"
+            onClick={() => setMenuOpen(false)}
+          >
             <SVG name="logo" />
           </Link>
 

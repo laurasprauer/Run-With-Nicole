@@ -108,10 +108,10 @@
   }
 
   .step {
-    color: color-alpha("--color-white", 0.7);
+    color: color-alpha("--color-white", 0.92); // ≥ 4.5:1 on the translucent card
   }
 
   .box .text {
-    color: color-alpha("--color-white", 0.85);
+    color: color-alpha("--color-white", 0.92); // ≥ 4.5:1 on the translucent card
   }
 }

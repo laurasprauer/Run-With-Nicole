@@ -10,7 +10,7 @@
     "generate:pageData": "node ./src/app/utils/generatePageData.cjs",
     "generate:sitemap": "node ./src/app/utils/generateSitemap.cjs",
     "generate:netlifyFiles": "node ./src/app/utils/generateNetlifyFiles.cjs",
-    "build": "npm run generate:slugs && npm run generate:pageData && npm run generate:sitemap && npm run generate:netlifyFiles && next build",
+    "build": "npm run generate:slugs && npm run generate:pageData && npm run generate:sitemap && npm run generate:netlifyFiles && next build && node scripts/inline-css.cjs",
     "studio": "cd studio && npm run dev",
     "lint": "eslint src/",
     "check-node": "node scripts/check-node-version.js"

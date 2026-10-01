@@ -264,6 +264,8 @@
 // Transparent over a dark first section (navy or background image): light text + logo
 
 .transparentDark {
+  --focus-ring: var(--color-white);
+
   .logo :global(.logoRunner) {
     fill: var(--color-white);
   }

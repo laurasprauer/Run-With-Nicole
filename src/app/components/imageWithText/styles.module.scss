@@ -165,12 +165,19 @@ $offset: 1.5rem;
     padding-left: $offset;
   }
 
-  // Shrink-wraps the image so the block matches its real edges (no letterboxing)
+  // Sized to the image's exact shape so the block matches its real edges (no
+  // letterboxing): width = min(column, max-height × aspect ratio). --img-aspect is set
+  // inline from the Sanity dimensions, so the space is reserved before the image loads
+  // (a shrink-to-fit frame collapsed to 0 until load → layout shift).
   .offsetFrame {
+    --contain-max-h: 400px;
     position: relative;
     isolation: isolate; // lets ::before sit behind the image with z-index: -1
-    width: fit-content;
-    max-width: 100%;
+    width: min(100%, calc(var(--contain-max-h) * var(--img-aspect, 1)));
+
+    @include media($contain-row) {
+      --contain-max-h: 640px;
+    }
 
     &::before {
       content: "";
@@ -182,9 +189,9 @@ $offset: 1.5rem;
     }
 
     img {
-      width: auto;
-      max-width: 100%;
+      width: 100%;
       height: auto;
+      max-height: none;
       object-fit: initial;
     }
   }

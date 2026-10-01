@@ -1,7 +1,8 @@
+// Note: doesn't remove `outline` — keyboard focus rings must stay visible (see the
+// global :focus-visible rule in global-styles.scss).
 @mixin reset-button {
   background-color: transparent;
   border: none;
-  outline: none;
   padding: 0;
 }
 

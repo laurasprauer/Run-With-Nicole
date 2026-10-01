@@ -37,6 +37,12 @@ export const navigationType = defineType({
       ],
     }),
     defineField({
+      name: 'instagramUrl',
+      title: 'Instagram URL',
+      type: 'url',
+      description: 'Shown as an Instagram icon in the footer, e.g. https://www.instagram.com/run.with.nicole.la',
+    }),
+    defineField({
       name: 'footerEmail',
       title: 'Footer email',
       type: 'string',

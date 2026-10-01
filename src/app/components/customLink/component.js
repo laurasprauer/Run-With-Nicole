@@ -17,7 +17,7 @@ const CustomLink = ({ children, to, target, className, ariaLabel, onClick, ...re
 
   if (isInternalPath(to)) {
     return (
-      <Link href={to} target={target} {...shared}>
+      <Link href={to} target={target} prefetch={false} {...shared}>
         {children}
       </Link>
     );

@@ -58,8 +58,11 @@ export default function Page({ page, navigation, slug }) {
           />
         </Head>
       )}
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <Header links={navigation.links} transparentTheme={transparentTheme} />
-      <main className={transparentTheme ? "has-transparent-header" : undefined}>
+      <main id="main-content" tabIndex={-1} className={transparentTheme ? "has-transparent-header" : undefined}>
         {page ? (
           <MainContent data={page.mainContent} seo={page.seo} slug={slug} />
         ) : (
@@ -71,7 +74,7 @@ export default function Page({ page, navigation, slug }) {
           </>
         )}
       </main>
-      <Footer email={navigation.footerEmail} />
+      <Footer email={navigation.footerEmail} instagramUrl={navigation.instagramUrl} />
     </>
   );
 }

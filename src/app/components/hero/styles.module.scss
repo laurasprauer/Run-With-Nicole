@@ -5,8 +5,10 @@
 }
 
 // Optional full-bleed background photo with two overlay layers (one pseudo-element):
-//  1. a near-black navy shade, darkest at the top behind the header links, for contrast
-//  2. the brand navy → sky → teal gradient, semi-transparent so the photo shows through
+//  1. a uniform near-black navy shade (35%) — keeps white text ≥ 4.5:1 (WCAG AA) even
+//     over the light sky end of the gradient (measured; 30% was the minimum passing)
+//  2. the brand navy → sky gradient, semi-transparent so the photo shows through
+// If you lighten the overlay or swap in a much brighter photo, re-check text contrast.
 .background {
   position: absolute;
   inset: 0;
@@ -28,11 +30,9 @@
     position: absolute;
     inset: 0;
     z-index: 3;
-    background: linear-gradient(
-      140deg,
-      color-alpha("--color-navy", 0.8) 40%,
-      color-alpha("--color-sky", 0.8) 100%
-    );
+    background:
+      linear-gradient(color-alpha("--color-navy-black", 0.35), color-alpha("--color-navy-black", 0.35)),
+      linear-gradient(140deg, color-alpha("--color-navy", 0.8) 40%, color-alpha("--color-sky", 0.8) 100%);
   }
 }
 

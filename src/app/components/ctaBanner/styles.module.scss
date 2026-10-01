@@ -51,10 +51,6 @@
       margin-bottom: 0;
     }
   }
-
-  a:not([data-button]) {
-    font-weight: 600;
-  }
 }
 
 // No z-index here on purpose: the rings and button stack against .body in the
