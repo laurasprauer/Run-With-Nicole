@@ -170,6 +170,7 @@ Sections take `componentBgColor: "white" | "offWhite" | "teal" | "navy"` (Sanity
 - `public/__forms.html` registers the form `inquiry` at deploy time (Netlify can't see React-rendered forms). The React form POSTs urlencoded data to `/__forms.html` with `form-name=inquiry`.
 - **Adding/renaming a field: update BOTH `contactForm/component.js` and `public/__forms.html`**, or Netlify silently drops it.
 - Layout (2-column rows, stacked on phones): **1** `name` (Full name) + `email` · **2** `age` + `trainingForRace` (Yes/No) · (if Yes) `raceDistance` + `raceDate` · **3** `coachGoals` · **4** `referralSource`. Plus honeypot `bot-field`. `validate()` checks in the same order so the first error gets focus.
+- **Email subject:** the React form sends a `subject` field ("<Full name> - Run With Nicole New Coaching Inquiry"), which Netlify uses as the notification subject (replacing the default "[Netlify] …" subject; it also overrides any subject set in the Netlify UI). `subject` is declared in `__forms.html` too. Netlify's UI subject variables (`%{formName}` etc.) can't include form answers, which is why it's built in code.
 - In `npm run dev` submissions are logged to the console and faked as success (Netlify Forms only exists on Netlify).
 - Email notifications → runwithnicole.la@gmail.com are configured in the Netlify UI (Netlify → Forms → Notifications).
 

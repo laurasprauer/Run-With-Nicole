@@ -81,7 +81,13 @@ export const ContactForm = ({
 
     setStatus("submitting");
 
-    const payload = { "form-name": FORM_NAME, ...values };
+    const payload = {
+      "form-name": FORM_NAME,
+      // Email subject for the Netlify notification (replaces the default "[Netlify] …" one).
+      // Netlify's own subject variables can't include form answers, so it's built here.
+      subject: `${values.name.trim()} - Run With Nicole New Coaching Inquiry`,
+      ...values,
+    };
     if (values.trainingForRace !== "Yes") {
       payload.raceDistance = "";
       payload.raceDate = "";
