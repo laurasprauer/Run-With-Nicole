@@ -18,8 +18,10 @@ export const Footer = ({ email, instagramUrl }) => {
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
-        <Link href="/" prefetch={false} className={styles.logo} aria-label="Run With Nicole — home">
+        <Link href="/" prefetch={false} className={styles.logo}>
           <SVG name="logo" />
+          {/* Differs from the header logo's text so anchor texts aren't duplicated */}
+          <span className="sr-only">Run With Nicole – Back to top</span>
         </Link>
 
         {email && (

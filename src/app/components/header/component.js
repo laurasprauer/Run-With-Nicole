@@ -124,10 +124,11 @@ export const Header = ({ links = [], transparentTheme = null }) => {
             href="/"
             prefetch={false} // one-page site — prefetching "/" data is a wasted request
             className={styles.logo}
-            aria-label="Run With Nicole — home"
             onClick={() => setMenuOpen(false)}
           >
             <SVG name="logo" />
+            {/* Real link text (not aria-label) so SEO checkers see an anchor text */}
+            <span className="sr-only">Run With Nicole – Home</span>
           </Link>
 
           <button

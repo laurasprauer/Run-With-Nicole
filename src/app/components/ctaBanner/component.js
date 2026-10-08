@@ -11,9 +11,12 @@ import * as styles from "./styles.module.scss";
 // Full-width callout band (its own section, always teal): text on the left, one button
 // on the right with an abstract "target" (concentric rings) behind it, stacked and
 // centered on phones.
-// The button downloads `downloadFileUrl` when a file is uploaded in Sanity (Sanity's
-// `?dl=` param forces a download with the original filename); otherwise it links to
-// `componentButtonLink`. No file and no link → no button.
+// The button downloads `downloadFileUrl` when a file is uploaded in Sanity; otherwise
+// it links to `componentButtonLink`. No file and no link → no button.
+// The download uses the `download` attribute, not Sanity's `?dl=` param, so the link has
+// no query string (SEO checkers flag "dynamic parameters"). On Netlify the file is served
+// from our own domain (/sanity-files/… proxy), where `download` works; the URL already
+// ends in the readable filename (vanity filename from generatePageData).
 export const CtaBanner = ({
   body,
   componentButtonLabel,
@@ -31,7 +34,7 @@ export const CtaBanner = ({
     removeBottomPadding,
   });
 
-  const href = downloadFileUrl ? `${downloadFileUrl}?dl=` : componentButtonLink;
+  const href = downloadFileUrl || componentButtonLink;
 
   return (
     <div className={containerClasses}>
