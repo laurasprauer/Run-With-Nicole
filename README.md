@@ -106,6 +106,7 @@ Add it in **Domain management**, then update `NEXT_PUBLIC_SITE_URL`.
 
 - **Studio:** https://runwithnicole.sanity.studio → **Pages → Home** holds the page sections, and **Header & Footer** holds the menu links and footer email.
 - **Publish:** click **Publish** and the live site rebuilds automatically (about 1–2 minutes).
+- **Deploy tab:** the **Deploy** tab in the Studio rebuilds the live site on demand (e.g. if an automatic rebuild didn't run). Click **Deploy** and watch the status; the site updates in about 1–2 minutes.
 - **Section backgrounds:** each section has a **Background color** picker (White / Off-white / Teal / Navy).
 
 ### Waiver / downloadable files

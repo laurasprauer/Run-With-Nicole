@@ -1,5 +1,6 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import {netlifyTool} from 'sanity-plugin-netlify'
 import {DocumentsIcon, MenuIcon} from '@sanity/icons'
 import {schemaTypes} from './schemaTypes'
 
@@ -25,7 +26,13 @@ export default defineConfig({
               .child(S.document().schemaType('navigation').documentId(NAVIGATION_ID)),
           ]),
     }),
+    // "Deploy" tab: rebuild the live site on demand (build hook + Site ID + access
+    // token are entered once inside the tool; stored as private `netlify.*` docs)
+    netlifyTool(),
   ],
+
+  // No content releases for this site — hides the Releases tab and release menus
+  releases: {enabled: false},
 
   schema: {
     types: schemaTypes,
