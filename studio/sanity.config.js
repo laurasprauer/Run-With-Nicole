@@ -31,8 +31,11 @@ export default defineConfig({
     netlifyTool(),
   ],
 
-  // No content releases for this site — hides the Releases tab and release menus
+  // No content releases or scheduling for this site — hides the Releases and
+  // Scheduled drafts tabs and their document menus (plain edit → publish only)
   releases: {enabled: false},
+  scheduledDrafts: {enabled: false},
+  scheduledPublishing: {enabled: false},
 
   schema: {
     types: schemaTypes,

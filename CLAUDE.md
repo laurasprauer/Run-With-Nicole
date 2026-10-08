@@ -177,7 +177,7 @@ Sections take `componentBgColor: "white" | "offWhite" | "teal" | "navy"` (Sanity
 ## Sanity Studio
 
 - `studio/sanity.config.js`: structure = **Pages** + **Header & Footer** singleton (fixed id `navigation`; "create new" hidden).
-- **Releases** are turned off (`releases: {enabled: false}` in `sanity.config.js`) — no Releases tab or release menus.
+- **Releases and scheduling** are turned off in `sanity.config.js` (`releases`, `scheduledDrafts`, `scheduledPublishing` → `{enabled: false}`) — no Releases / Scheduled drafts tabs; editors just edit and publish.
 - **Deploy tab** (`sanity-plugin-netlify`, `netlifyTool()`): lets editors trigger a Netlify rebuild and watch its status. Configured once inside the tool (site name, Netlify Project ID, build hook URL, personal access token) — stored in the dataset as `netlify.*` documents, which are private (dotted IDs aren't publicly readable). Nothing is configured in code.
 - Schema: `pageType.js` (sections via `mainContent[]`, fields shown per component with `onlyFor(...)`), `navigationType.js`.
 - Seed: `studio/seed/home.ndjson` (home page with all copy + navigation). Import with `cd studio && npm run import-seed` (`--missing` = won't overwrite existing docs).
